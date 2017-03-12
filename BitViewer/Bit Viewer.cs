@@ -15,7 +15,6 @@ namespace BitViewer
     public partial class Form1 : Form
     {
         BitArray gBits = null;
-        uint BASIC_BIT_SIZE = 10;
         uint BASIC_BORDER_SIZE = 2;
 
         public Form1()
@@ -64,13 +63,13 @@ namespace BitViewer
             Cursor.Current = Cursors.WaitCursor;
             Application.DoEvents();
 
-            uint bitSizeInPixels = BASIC_BIT_SIZE * (uint)bitSize.Value;
+            uint bitSizeInPixels = (uint)bitSize.Value;
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // configure the scroll bars
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             uint visibleBitsPerLine = (uint)ImagePanel.Width / (BASIC_BORDER_SIZE + bitSizeInPixels);
-            uint visibleNumLines = (uint)ImagePanel.Height / (BASIC_BORDER_SIZE + BASIC_BIT_SIZE * (uint)bitSize.Value);
+            uint visibleNumLines = (uint)ImagePanel.Height / (BASIC_BORDER_SIZE + (uint)bitSize.Value);
 
             uint bitsPerLine = (uint)FrameSize1.Value * (uint)FrameSize2.Value;
             uint numLines = ((uint)gBits.Length - (uint)readFileOffset.Value + bitsPerLine - 1) / bitsPerLine;
@@ -91,12 +90,15 @@ namespace BitViewer
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             Bitmap bitsBitmap = new Bitmap(ImagePanel.Width, ImagePanel.Height);
-            
+
+            SolidBrush currentBitBrush = null;
+
             using (Graphics g = Graphics.FromImage(bitsBitmap))
             using (SolidBrush blueBrush = new SolidBrush(Color.Blue))
             using (SolidBrush whiteBrush = new SolidBrush(Color.White))
+            using (SolidBrush grayBrush = new SolidBrush(Color.Gray))
             {
-                g.FillRectangle(whiteBrush, 0, 0, ImagePanel.Width, ImagePanel.Height);
+                g.FillRectangle(grayBrush, 0, 0, ImagePanel.Width, ImagePanel.Height);
 
                 IEnumerator iterator = gBits.GetEnumerator();
                 iterator.MoveNext(); // now points to the first element
@@ -117,15 +119,22 @@ namespace BitViewer
                     }
                     for (int x = 0; x < bitsPerLine; ++x)
                     {
+                        // draw a pixel
                         if ((bool)iterator.Current)
                         {
-                            // draw a pixel
-                            g.FillRectangle(blueBrush,
+                            currentBitBrush = blueBrush;
+                        }
+                        else
+                        {
+                            currentBitBrush = whiteBrush;
+                        }
+
+                        g.FillRectangle(currentBitBrush,
                                 x * (bitSizeInPixels + BASIC_BORDER_SIZE),
                                 y * (bitSizeInPixels + BASIC_BORDER_SIZE),
                                 bitSizeInPixels,
                                 bitSizeInPixels);
-                        }
+
                         if (!iterator.MoveNext())
                         {
                             iterationEnded = true;

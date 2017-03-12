@@ -113,12 +113,12 @@
             // 
             this.bitSize.Location = new System.Drawing.Point(436, 19);
             this.bitSize.Maximum = new decimal(new int[] {
-            32,
+            128,
             0,
             0,
             0});
             this.bitSize.Minimum = new decimal(new int[] {
-            1,
+            2,
             0,
             0,
             0});
@@ -126,7 +126,7 @@
             this.bitSize.Size = new System.Drawing.Size(63, 20);
             this.bitSize.TabIndex = 6;
             this.bitSize.Value = new decimal(new int[] {
-            1,
+            4,
             0,
             0,
             0});
