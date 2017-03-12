@@ -50,9 +50,6 @@ namespace BitViewer
 
         }
 
-        private void BitsPicture_Click(object sender, EventArgs e)
-        {
-        }
 
         private void RefreshBMP()
         {
@@ -87,8 +84,8 @@ namespace BitViewer
                     iterator.MoveNext();
                 }
 
-                // read all the complete lines
-                for (int y = 0; y < numLines; ++y)
+                // read all the complete lines (except the last, possibly incomplete, line)
+                for (int y = 0; y < (numLines - 1); ++y)
                 {
                     for (int x = 0; x < bitsPerLine; ++x)
                     {
@@ -102,10 +99,19 @@ namespace BitViewer
                     }
                 }
 
-                // read the single incomplete line (if at all)
-                for (int i = 0; i < (gBits.Length % bitsPerLine); ++i)
+                // read the last, possibly incomplete, line
+                for (int x = 0; x < (gBits.Length % bitsPerLine); ++x)
                 {
+                    if ((bool)iterator.Current)
+                    {
+                        // draw a pixel
+                        g.FillRectangle(blueBrush, x, numLines - 1, 1, 1);
+                    }
 
+                    if (!iterator.MoveNext())
+                    {
+                        break;
+                    }
                 }
             }
 
@@ -161,10 +167,10 @@ namespace BitViewer
 
         }
 
-        private void IsRev8_CheckedChanged(object sender, EventArgs e)
+        private void BitsPicture_LocationChanged(object sender, EventArgs e)
         {
-            
-            RefreshBMP();
+
         }
+
     }
 }

@@ -46,7 +46,6 @@
             this.readFileOffset = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.IsRev = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.BitsPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FrameSize1)).BeginInit();
@@ -66,7 +65,7 @@
             this.BitsPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.BitsPicture.TabIndex = 0;
             this.BitsPicture.TabStop = false;
-            this.BitsPicture.Click += new System.EventHandler(this.BitsPicture_Click);
+            this.BitsPicture.LocationChanged += new System.EventHandler(this.BitsPicture_LocationChanged);
             // 
             // FrameSize1
             // 
@@ -126,7 +125,7 @@
             // 
             // bitSize
             // 
-            this.bitSize.Location = new System.Drawing.Point(519, 19);
+            this.bitSize.Location = new System.Drawing.Point(436, 19);
             this.bitSize.Maximum = new decimal(new int[] {
             32,
             0,
@@ -162,7 +161,7 @@
             // 
             // btnHeyLena
             // 
-            this.btnHeyLena.Location = new System.Drawing.Point(642, 19);
+            this.btnHeyLena.Location = new System.Drawing.Point(562, 19);
             this.btnHeyLena.Name = "btnHeyLena";
             this.btnHeyLena.Size = new System.Drawing.Size(293, 20);
             this.btnHeyLena.TabIndex = 8;
@@ -172,7 +171,7 @@
             // 
             // readFileOffset
             // 
-            this.readFileOffset.Location = new System.Drawing.Point(997, 19);
+            this.readFileOffset.Location = new System.Drawing.Point(905, 19);
             this.readFileOffset.Maximum = new decimal(new int[] {
             10000000,
             0,
@@ -202,17 +201,6 @@
             this.label2.TabIndex = 11;
             this.label2.Text = "Frame Size          X            Frame Size";
             // 
-            // IsRev
-            // 
-            this.IsRev.AutoSize = true;
-            this.IsRev.Location = new System.Drawing.Point(408, 19);
-            this.IsRev.Name = "IsRev";
-            this.IsRev.Size = new System.Drawing.Size(89, 17);
-            this.IsRev.TabIndex = 13;
-            this.IsRev.Text = "Reverse Line";
-            this.IsRev.UseVisualStyleBackColor = true;
-            this.IsRev.CheckedChanged += new System.EventHandler(this.IsRev8_CheckedChanged);
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -227,7 +215,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1474, 815);
-            this.Controls.Add(this.IsRev);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -263,7 +250,6 @@
         private System.Windows.Forms.NumericUpDown readFileOffset;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.CheckBox IsRev;
         public Form1.PictureBoxWithInterpolationMode BitsPicture;
         private System.Windows.Forms.Label label3;
     }
