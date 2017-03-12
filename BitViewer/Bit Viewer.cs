@@ -76,21 +76,9 @@ namespace BitViewer
             uint numLines = ((uint)gBits.Length - (uint)readFileOffset.Value + bitsPerLine - 1) / bitsPerLine;
 
             // the maximum should be the number of bits we're not seeing
-            if (bitsPerLine > visibleBitsPerLine)
-            {
-                hScrollBar1.Maximum = (int)((uint)FrameSize1.Value * (uint)FrameSize2.Value - visibleBitsPerLine);
-                //hScrollBar1.Value = 0;
-                hScrollBar1.Visible = true;
-            }
-            else
-            {
-                hScrollBar1.Visible = false;
-            }
-
             if (numLines > visibleNumLines)
             {
                 vScrollBar1.Maximum = (int)(numLines - visibleNumLines);
-                //vScrollBar1.Value = 0;
                 vScrollBar1.Visible = true;
             }
             else
@@ -101,9 +89,6 @@ namespace BitViewer
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Done with the scroll bars
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-            // update numLines to include the scrolled lines
-            numLines -= (uint)vScrollBar1.Value;
 
             Bitmap bitsBitmap = new Bitmap(ImagePanel.Width, ImagePanel.Height);
             
@@ -122,9 +107,14 @@ namespace BitViewer
                     iterator.MoveNext();
                 }
 
-                // read all the complete lines (except the last, possibly incomplete, line)
-                for (int y = 0; y < (numLines - 1); ++y)
+                // draw all them bits
+                bool iterationEnded = false;
+                for (int y = 0; y < visibleNumLines; ++y)
                 {
+                    if (iterationEnded)
+                    {
+                        break;
+                    }
                     for (int x = 0; x < bitsPerLine; ++x)
                     {
                         if ((bool)iterator.Current)
@@ -136,27 +126,11 @@ namespace BitViewer
                                 bitSizeInPixels,
                                 bitSizeInPixels);
                         }
-
-                        iterator.MoveNext();
-                    }
-                }
-
-                // read the last, possibly incomplete, line
-                for (int x = 0; x < (gBits.Length % bitsPerLine); ++x)
-                {
-                    if ((bool)iterator.Current)
-                    {
-                        // draw a pixel
-                        g.FillRectangle(blueBrush,
-                            x * (bitSizeInPixels + BASIC_BORDER_SIZE),
-                            (numLines - 1) * (bitSizeInPixels + BASIC_BORDER_SIZE),
-                            bitSizeInPixels,
-                            bitSizeInPixels);
-                    }
-
-                    if (!iterator.MoveNext())
-                    {
-                        break;
+                        if (!iterator.MoveNext())
+                        {
+                            iterationEnded = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -189,6 +163,9 @@ namespace BitViewer
 
         private void btnHeyLena_Click(object sender, EventArgs e)
         {
+            MessageBox.Show("NOW THAT THE CODE CHANGED, WHAT SHOULD THIS BUTTON DO?", "OH NO");
+            return;
+
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
             DialogResult result = openFileDialog1.ShowDialog();
             if (result == DialogResult.OK) // Test result.
@@ -208,14 +185,9 @@ namespace BitViewer
             RefreshBMP();
         }
 
-        private void vScrollBar1_Scroll(object sender, ScrollEventArgs e)
+        private void vScrollBar1_ValueChanged(object sender, EventArgs e)
         {
-            if (vScrollBar1.Value != e.NewValue)
-            {
-                vScrollBar1.Value = e.NewValue;
-                RefreshBMP();
-            }
-            
+            RefreshBMP();
         }
 
     }
