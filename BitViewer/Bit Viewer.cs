@@ -14,8 +14,9 @@ namespace BitViewer
 {
     public partial class Form1 : Form
     {
-        BitArray gBits;
-        uint BASIC_GRID_SIZE = 10;
+        BitArray gBits = null;
+        uint BASIC_BIT_SIZE = 10;
+        uint BASIC_BORDER_SIZE = 2;
 
         public Form1()
         {
@@ -50,13 +51,12 @@ namespace BitViewer
 
         }
 
-
         private void RefreshBMP()
         {
-            if (readFileOffset.Value >= gBits.Length)
+            if ((gBits == null) || (readFileOffset.Value >= gBits.Length))
             {
                 // nothing to show
-                BitsPicture.Image = new Bitmap(1, 1);
+                ImagePanel.BackgroundImage = new Bitmap(1, 1);
                 return;
             }
 
@@ -64,22 +64,60 @@ namespace BitViewer
             Cursor.Current = Cursors.WaitCursor;
             Application.DoEvents();
 
+            uint bitSizeInPixels = BASIC_BIT_SIZE * (uint)bitSize.Value;
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // configure the scroll bars
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            uint visibleBitsPerLine = (uint)ImagePanel.Width / (BASIC_BORDER_SIZE + bitSizeInPixels);
+            uint visibleNumLines = (uint)ImagePanel.Height / (BASIC_BORDER_SIZE + BASIC_BIT_SIZE * (uint)bitSize.Value);
 
             uint bitsPerLine = (uint)FrameSize1.Value * (uint)FrameSize2.Value;
             uint numLines = ((uint)gBits.Length - (uint)readFileOffset.Value + bitsPerLine - 1) / bitsPerLine;
-            uint bitSizeInPixels = BASIC_GRID_SIZE * (uint)bitSize.Value;
 
-            Bitmap bitsBitmap = new Bitmap((int)bitsPerLine, (int)numLines);
+            // the maximum should be the number of bits we're not seeing
+            if (bitsPerLine > visibleBitsPerLine)
+            {
+                hScrollBar1.Maximum = (int)((uint)FrameSize1.Value * (uint)FrameSize2.Value - visibleBitsPerLine);
+                //hScrollBar1.Value = 0;
+                hScrollBar1.Visible = true;
+            }
+            else
+            {
+                hScrollBar1.Visible = false;
+            }
+
+            if (numLines > visibleNumLines)
+            {
+                vScrollBar1.Maximum = (int)(numLines - visibleNumLines);
+                //vScrollBar1.Value = 0;
+                vScrollBar1.Visible = true;
+            }
+            else
+            {
+                vScrollBar1.Visible = false;
+            }
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Done with the scroll bars
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+            // update numLines to include the scrolled lines
+            numLines -= (uint)vScrollBar1.Value;
+
+            Bitmap bitsBitmap = new Bitmap(ImagePanel.Width, ImagePanel.Height);
             
             using (Graphics g = Graphics.FromImage(bitsBitmap))
             using (SolidBrush blueBrush = new SolidBrush(Color.Blue))
             using (SolidBrush whiteBrush = new SolidBrush(Color.White))
             {
+                g.FillRectangle(whiteBrush, 0, 0, ImagePanel.Width, ImagePanel.Height);
+
                 IEnumerator iterator = gBits.GetEnumerator();
                 iterator.MoveNext(); // now points to the first element
 
                 // skip bits as needed
-                for (int i = 0; i < readFileOffset.Value; ++i)
+                for (int i = 0; i < (readFileOffset.Value + bitsPerLine * vScrollBar1.Value); ++i)
                 {
                     iterator.MoveNext();
                 }
@@ -92,7 +130,11 @@ namespace BitViewer
                         if ((bool)iterator.Current)
                         {
                             // draw a pixel
-                            g.FillRectangle(blueBrush, x, y, 1, 1);
+                            g.FillRectangle(blueBrush,
+                                x * (bitSizeInPixels + BASIC_BORDER_SIZE),
+                                y * (bitSizeInPixels + BASIC_BORDER_SIZE),
+                                bitSizeInPixels,
+                                bitSizeInPixels);
                         }
 
                         iterator.MoveNext();
@@ -105,7 +147,11 @@ namespace BitViewer
                     if ((bool)iterator.Current)
                     {
                         // draw a pixel
-                        g.FillRectangle(blueBrush, x, numLines - 1, 1, 1);
+                        g.FillRectangle(blueBrush,
+                            x * (bitSizeInPixels + BASIC_BORDER_SIZE),
+                            (numLines - 1) * (bitSizeInPixels + BASIC_BORDER_SIZE),
+                            bitSizeInPixels,
+                            bitSizeInPixels);
                     }
 
                     if (!iterator.MoveNext())
@@ -120,9 +166,9 @@ namespace BitViewer
             Application.DoEvents();
 
             // display image
-            BitsPicture.Height = (int)(numLines * bitSizeInPixels);
-            BitsPicture.Width = (int)(bitSizeInPixels * bitsPerLine);
-            BitsPicture.Image = bitsBitmap;
+            // ImagePanel.Height = (int)(numLines * bitSizeInPixels);
+            // ImagePanel.Width = (int)(bitSizeInPixels * bitsPerLine);
+            ImagePanel.BackgroundImage = bitsBitmap;
             
         }
 
@@ -147,8 +193,8 @@ namespace BitViewer
             DialogResult result = openFileDialog1.ShowDialog();
             if (result == DialogResult.OK) // Test result.
             {
-                Stream st = new MemoryStream(File.ReadAllBytes(openFileDialog1.FileName));
-                BitsPicture.Image = new Bitmap(st);
+                // Stream st = new MemoryStream(File.ReadAllBytes(openFileDialog1.FileName));
+                // BitsPicture.Image = new Bitmap(st);
             }
         }
 
@@ -157,19 +203,19 @@ namespace BitViewer
             RefreshBMP();
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void Form1_ResizeEnd(object sender, EventArgs e)
         {
-
+            RefreshBMP();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void vScrollBar1_Scroll(object sender, ScrollEventArgs e)
         {
-
-        }
-
-        private void BitsPicture_LocationChanged(object sender, EventArgs e)
-        {
-
+            if (vScrollBar1.Value != e.NewValue)
+            {
+                vScrollBar1.Value = e.NewValue;
+                RefreshBMP();
+            }
+            
         }
 
     }

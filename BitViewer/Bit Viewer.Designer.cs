@@ -36,7 +36,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.BitsPicture = new BitViewer.Form1.PictureBoxWithInterpolationMode();
             this.FrameSize1 = new System.Windows.Forms.NumericUpDown();
             this.FrameSize2 = new System.Windows.Forms.NumericUpDown();
             this.LoadBitsButton = new System.Windows.Forms.Button();
@@ -47,25 +46,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.BitsPicture)).BeginInit();
+            this.hScrollBar1 = new System.Windows.Forms.HScrollBar();
+            this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
             ((System.ComponentModel.ISupportInitialize)(this.FrameSize1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FrameSize2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bitSize)).BeginInit();
-            this.ImagePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.readFileOffset)).BeginInit();
             this.SuspendLayout();
-            // 
-            // BitsPicture
-            // 
-            this.BitsPicture.BackColor = System.Drawing.Color.SeaShell;
-            this.BitsPicture.Cursor = System.Windows.Forms.Cursors.Default;
-            this.BitsPicture.Location = new System.Drawing.Point(4, 4);
-            this.BitsPicture.Name = "BitsPicture";
-            this.BitsPicture.Size = new System.Drawing.Size(1473, 780);
-            this.BitsPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.BitsPicture.TabIndex = 0;
-            this.BitsPicture.TabStop = false;
-            this.BitsPicture.LocationChanged += new System.EventHandler(this.BitsPicture_LocationChanged);
             // 
             // FrameSize1
             // 
@@ -151,12 +138,10 @@
             this.ImagePanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.ImagePanel.AutoScroll = true;
             this.ImagePanel.BackColor = System.Drawing.Color.SeaShell;
-            this.ImagePanel.Controls.Add(this.BitsPicture);
             this.ImagePanel.Location = new System.Drawing.Point(0, 45);
             this.ImagePanel.Name = "ImagePanel";
-            this.ImagePanel.Size = new System.Drawing.Size(1474, 771);
+            this.ImagePanel.Size = new System.Drawing.Size(1444, 745);
             this.ImagePanel.TabIndex = 7;
             // 
             // btnHeyLena
@@ -185,12 +170,11 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(516, 3);
+            this.label1.Location = new System.Drawing.Point(433, 3);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(45, 13);
             this.label1.TabIndex = 10;
             this.label1.Text = "Bit Size:";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
@@ -210,11 +194,32 @@
             this.label3.TabIndex = 12;
             this.label3.Text = "Skip first bits:";
             // 
+            // hScrollBar1
+            // 
+            this.hScrollBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.hScrollBar1.Location = new System.Drawing.Point(3, 793);
+            this.hScrollBar1.Name = "hScrollBar1";
+            this.hScrollBar1.Size = new System.Drawing.Size(1462, 18);
+            this.hScrollBar1.TabIndex = 13;
+            // 
+            // vScrollBar1
+            // 
+            this.vScrollBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.vScrollBar1.Location = new System.Drawing.Point(1447, 45);
+            this.vScrollBar1.Name = "vScrollBar1";
+            this.vScrollBar1.Size = new System.Drawing.Size(18, 748);
+            this.vScrollBar1.TabIndex = 14;
+            this.vScrollBar1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar1_Scroll);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1474, 815);
+            this.Controls.Add(this.vScrollBar1);
+            this.Controls.Add(this.hScrollBar1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -227,12 +232,12 @@
             this.Controls.Add(this.FrameSize1);
             this.Name = "Form1";
             this.Text = "BitViewer";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.BitsPicture)).EndInit();
+            this.ResizeEnd += new System.EventHandler(this.Form1_ResizeEnd);
             ((System.ComponentModel.ISupportInitialize)(this.FrameSize1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.FrameSize2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bitSize)).EndInit();
-            this.ImagePanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.readFileOffset)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -250,8 +255,9 @@
         private System.Windows.Forms.NumericUpDown readFileOffset;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        public Form1.PictureBoxWithInterpolationMode BitsPicture;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.HScrollBar hScrollBar1;
+        private System.Windows.Forms.VScrollBar vScrollBar1;
     }
 }
 
