@@ -22,10 +22,9 @@
         }
         public class PictureBoxWithInterpolationMode : System.Windows.Forms.PictureBox
         {
-            public System.Drawing.Drawing2D.InterpolationMode InterpolationMode { get; set; }
             protected override void OnPaint(System.Windows.Forms.PaintEventArgs paintEventArgs)
             {
-                paintEventArgs.Graphics.InterpolationMode = InterpolationMode;
+                paintEventArgs.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
                 base.OnPaint(paintEventArgs);
             }
         }
@@ -61,7 +60,6 @@
             // 
             this.BitsPicture.BackColor = System.Drawing.Color.SeaShell;
             this.BitsPicture.Cursor = System.Windows.Forms.Cursors.Default;
-            this.BitsPicture.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
             this.BitsPicture.Location = new System.Drawing.Point(4, 4);
             this.BitsPicture.Name = "BitsPicture";
             this.BitsPicture.Size = new System.Drawing.Size(1473, 780);
