@@ -17,7 +17,7 @@ namespace BitViewer
         BitArray myBits;
         string inputFile;
         int bitCount=0;
-        string bmpFile = "C:\\Bit Files\\TemporaryBMPFile.bmp";
+
         List<byte> myBytes;
         public Form1()
         {
@@ -73,27 +73,21 @@ namespace BitViewer
             0x0f, 0x8f, 0x4f, 0xcf, 0x2f, 0xaf, 0x6f, 0xef,
             0x1f, 0x9f, 0x5f, 0xdf, 0x3f, 0xbf, 0x7f, 0xff
         };
-        private void button1_Click(object sender, EventArgs e)
+
+        private void LoadBits_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
             DialogResult result = openFileDialog1.ShowDialog();
-            if (result == DialogResult.OK) // Test result.
+
+            if (result == DialogResult.OK)
             {
-                inputFile = openFileDialog1.FileName;
-                /*
-                AskHowManyBits ask = new AskHowManyBits();
-                while(!ask.pressedOK)
-                { }
-                int maxBitsToRead = (int)ask.BitsToReadInput.Value;
-                ask.Close();
-                */
                 try
                 {
-                    myBytes = new List<byte>(File.ReadAllBytes(inputFile));
+                    myBytes = new List<byte>(File.ReadAllBytes(openFileDialog1.FileName));
                     bitCount = myBytes.Count * 8; //Dunnu how to use not alligned files yet. Should fix that.
                     byte[] headerBytes = new byte[] {0x42, 0x4D, 0x7E, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3E, 0x00, 0x00, 0x00, 0x28, 0x00, 0x00, 0x00, 0x64, 0x00, 0x00, 0x00, 0x64, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0x00};
                     headerBytes = headerBytes.Reverse().ToArray();
-                    if (!IsRev8.Checked)
+                    if (!IsRev.Checked)
                     {
                         for (int i = 0; i < myBytes.Count; i++)
                         {
@@ -107,20 +101,20 @@ namespace BitViewer
                 }
                 catch (IOException)
                 {
-                    MessageBox.Show("Exception threw because of that stupid file you choosed. You happy? I'm Sad.", "Exception!");
+                    MessageBox.Show("Exception thrown because of that stupid file you chose. You happy? I'm Sad.", "Exception!");
                 }
             }
 
         }
 
         private void BitsPicture_Click(object sender, EventArgs e)
-        {
+        {        }
 
-        }
         private void RefreshBMP()
         {
             int width = (int)(FrameSize1.Value * FrameSize2.Value);
             int height = (int)((bitCount - (int)readFileOffset.Value) / (FrameSize1.Value * FrameSize2.Value));
+
             int fileLength = height * ((width + 31) / 32) * 32 + 62 * 8;
             if (width >= bitCount - (int)readFileOffset.Value)
             {
@@ -247,8 +241,12 @@ namespace BitViewer
             }
             byte[] myBytes = new byte[myBMPBits.Length / 8 + (myBMPBits.Length % 8 == 0 ? 0 : 1)];
             myBMPBits.CopyTo(myBytes, 0);
-            File.WriteAllBytes(bmpFile, myBytes);
+            // File.WriteAllBytes(bmpFile, myBytes);
+
+
             Stream bmpStream = new MemoryStream(myBytes);
+
+
             /*Color zero = Color.White;
             Color one = Color.Black;
             byte currByte = myBytes[0];
@@ -319,7 +317,7 @@ namespace BitViewer
             }
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void btnHeyLena_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
             DialogResult result = openFileDialog1.ShowDialog();
@@ -351,29 +349,8 @@ namespace BitViewer
 
         private void IsRev8_CheckedChanged(object sender, EventArgs e)
         {
-            if (bitCount != 0)
-            {
-                bool a;
-                bool b;
-                bool c;
-                bool d;
-                for (int i = 62 * 8; i < myBits.Count; i += 8)
-                {
-                    a = myBits[i];
-                    b = myBits[i + 1];
-                    c = myBits[i + 2];
-                    d = myBits[i + 3];
-                    myBits[i] = myBits[i + 7];
-                    myBits[i + 1] = myBits[i + 6];
-                    myBits[i + 2] = myBits[i + 5];
-                    myBits[i + 3] = myBits[i + 4];
-                    myBits[i + 4] = d;
-                    myBits[i + 5] = c;
-                    myBits[i + 6] = b;
-                    myBits[i + 7] = a;
-                }
-                RefreshBMP();
-            }
+            
+            RefreshBMP();
         }
     }
 }

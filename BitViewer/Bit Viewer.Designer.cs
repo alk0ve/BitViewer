@@ -43,12 +43,12 @@
             this.LoadBitsButton = new System.Windows.Forms.Button();
             this.bitSize = new System.Windows.Forms.NumericUpDown();
             this.ImagePanel = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnHeyLena = new System.Windows.Forms.Button();
             this.readFileOffset = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.IsRev = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.IsRev8 = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.BitsPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FrameSize1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FrameSize2)).BeginInit();
@@ -124,7 +124,7 @@
             this.LoadBitsButton.TabIndex = 5;
             this.LoadBitsButton.Text = "Load Bits From File";
             this.LoadBitsButton.UseVisualStyleBackColor = true;
-            this.LoadBitsButton.Click += new System.EventHandler(this.button1_Click);
+            this.LoadBitsButton.Click += new System.EventHandler(this.LoadBits_Click);
             // 
             // bitSize
             // 
@@ -162,15 +162,15 @@
             this.ImagePanel.Size = new System.Drawing.Size(1474, 771);
             this.ImagePanel.TabIndex = 7;
             // 
-            // button1
+            // btnHeyLena
             // 
-            this.button1.Location = new System.Drawing.Point(642, 19);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(293, 20);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "Hey Lena I don\'t remember what that button does";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            this.btnHeyLena.Location = new System.Drawing.Point(642, 19);
+            this.btnHeyLena.Name = "btnHeyLena";
+            this.btnHeyLena.Size = new System.Drawing.Size(293, 20);
+            this.btnHeyLena.TabIndex = 8;
+            this.btnHeyLena.Text = "Hey Lena I don\'t remember what that button does";
+            this.btnHeyLena.UseVisualStyleBackColor = true;
+            this.btnHeyLena.Click += new System.EventHandler(this.btnHeyLena_Click);
             // 
             // readFileOffset
             // 
@@ -190,9 +190,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(516, 3);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(42, 13);
+            this.label1.Size = new System.Drawing.Size(45, 13);
             this.label1.TabIndex = 10;
-            this.label1.Text = "Bit Size";
+            this.label1.Text = "Bit Size:";
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
@@ -204,44 +204,44 @@
             this.label2.TabIndex = 11;
             this.label2.Text = "Frame Size          X            Frame Size";
             // 
+            // IsRev
+            // 
+            this.IsRev.AutoSize = true;
+            this.IsRev.Location = new System.Drawing.Point(408, 19);
+            this.IsRev.Name = "IsRev";
+            this.IsRev.Size = new System.Drawing.Size(89, 17);
+            this.IsRev.TabIndex = 13;
+            this.IsRev.Text = "Reverse Line";
+            this.IsRev.UseVisualStyleBackColor = true;
+            this.IsRev.CheckedChanged += new System.EventHandler(this.IsRev8_CheckedChanged);
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(994, 3);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(237, 13);
+            this.label3.Size = new System.Drawing.Size(69, 13);
             this.label3.TabIndex = 12;
-            this.label3.Text = "This used to chop. I don\'t recommend using that.";
-            // 
-            // IsRev8
-            // 
-            this.IsRev8.AutoSize = true;
-            this.IsRev8.Location = new System.Drawing.Point(408, 19);
-            this.IsRev8.Name = "IsRev8";
-            this.IsRev8.Size = new System.Drawing.Size(70, 17);
-            this.IsRev8.TabIndex = 13;
-            this.IsRev8.Text = "Rev8 Me";
-            this.IsRev8.UseVisualStyleBackColor = true;
-            this.IsRev8.CheckedChanged += new System.EventHandler(this.IsRev8_CheckedChanged);
+            this.label3.Text = "Skip first bits:";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1474, 815);
-            this.Controls.Add(this.IsRev8);
+            this.Controls.Add(this.IsRev);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.readFileOffset);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnHeyLena);
             this.Controls.Add(this.ImagePanel);
             this.Controls.Add(this.bitSize);
             this.Controls.Add(this.LoadBitsButton);
             this.Controls.Add(this.FrameSize2);
             this.Controls.Add(this.FrameSize1);
             this.Name = "Form1";
-            this.Text = "dd";
+            this.Text = "BitViewer";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.BitsPicture)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.FrameSize1)).EndInit();
@@ -261,13 +261,13 @@
         private System.Windows.Forms.Button LoadBitsButton;
         private System.Windows.Forms.NumericUpDown bitSize;
         private System.Windows.Forms.Panel ImagePanel;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnHeyLena;
         private System.Windows.Forms.NumericUpDown readFileOffset;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.CheckBox IsRev8;
+        private System.Windows.Forms.CheckBox IsRev;
         public Form1.PictureBoxWithInterpolationMode BitsPicture;
+        private System.Windows.Forms.Label label3;
     }
 }
 
