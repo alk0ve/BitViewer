@@ -132,11 +132,11 @@ namespace BitViewer
                 g.FillRectangle(grayBrush, 0, 0, ImagePanel.Width, ImagePanel.Height);
 
                 // draw red lines between bytes
-                //uint bytesVisible = 
-                //for (int i = 1; i < (); ++i)
-                //{
-
-                //}
+                for (int i = 1; i < ((Math.Min(visibleBitsPerLine, bitsPerLine) + 7) / 8); ++i)
+                {
+                    g.FillRectangle(redBrush, 8 * i * (bitSizeInPixels + BASIC_BORDER_SIZE) - BASIC_BORDER_SIZE,
+                        0, 2, ImagePanel.Height);
+                }
 
                 IEnumerator iterator = gBits.GetEnumerator();
                 iterator.MoveNext(); // now points to the first element
