@@ -75,6 +75,7 @@ namespace BitViewer
 
                 gBits = new BitArray(bytesFromFile);
                 RefreshBMP();
+                this.Text = String.Format("BitViewer - {0}", openFileDialog1.FileName);
             }
 
         }
