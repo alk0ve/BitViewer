@@ -115,7 +115,7 @@ namespace BitViewer
             }
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            // Done with the scroll bars
+            // Draw the currently visible bits
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             Bitmap bitsBitmap = new Bitmap(ImagePanel.Width, ImagePanel.Height);
@@ -126,8 +126,17 @@ namespace BitViewer
             using (SolidBrush blueBrush = new SolidBrush(Color.Blue))
             using (SolidBrush whiteBrush = new SolidBrush(Color.White))
             using (SolidBrush grayBrush = new SolidBrush(Color.Gray))
+            using (SolidBrush redBrush = new SolidBrush(Color.Red))
             {
+                // draw background
                 g.FillRectangle(grayBrush, 0, 0, ImagePanel.Width, ImagePanel.Height);
+
+                // draw red lines between bytes
+                //uint bytesVisible = 
+                //for (int i = 1; i < (); ++i)
+                //{
+
+                //}
 
                 IEnumerator iterator = gBits.GetEnumerator();
                 iterator.MoveNext(); // now points to the first element
@@ -148,21 +157,26 @@ namespace BitViewer
                     }
                     for (int x = 0; x < bitsPerLine; ++x)
                     {
-                        // draw a pixel
-                        if ((bool)iterator.Current)
+                        if (x < visibleBitsPerLine)
                         {
-                            currentBitBrush = blueBrush;
-                        }
-                        else
-                        {
-                            currentBitBrush = whiteBrush;
-                        }
+                            // draw a pixel
+                            if ((bool)iterator.Current)
+                            {
+                                currentBitBrush = blueBrush;
+                            }
+                            else
+                            {
+                                currentBitBrush = whiteBrush;
+                            }
 
-                        g.FillRectangle(currentBitBrush,
-                                x * (bitSizeInPixels + BASIC_BORDER_SIZE),
-                                y * (bitSizeInPixels + BASIC_BORDER_SIZE),
-                                bitSizeInPixels,
-                                bitSizeInPixels);
+                            g.FillRectangle(currentBitBrush,
+                                    x * (bitSizeInPixels + BASIC_BORDER_SIZE),
+                                    y * (bitSizeInPixels + BASIC_BORDER_SIZE),
+                                    bitSizeInPixels,
+                                    bitSizeInPixels);
+                        }
+                        // else we don't draw the pixel
+                        
 
                         if (!iterator.MoveNext())
                         {
