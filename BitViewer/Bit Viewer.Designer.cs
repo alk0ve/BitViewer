@@ -47,6 +47,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
+            this.lblTotalFrameSize = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.FrameSize1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FrameSize2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bitSize)).BeginInit();
@@ -101,7 +102,7 @@
             // 
             // LoadBitsButton
             // 
-            this.LoadBitsButton.Location = new System.Drawing.Point(274, 12);
+            this.LoadBitsButton.Location = new System.Drawing.Point(345, 12);
             this.LoadBitsButton.Name = "LoadBitsButton";
             this.LoadBitsButton.Size = new System.Drawing.Size(115, 31);
             this.LoadBitsButton.TabIndex = 5;
@@ -111,7 +112,7 @@
             // 
             // bitSize
             // 
-            this.bitSize.Location = new System.Drawing.Point(436, 19);
+            this.bitSize.Location = new System.Drawing.Point(500, 19);
             this.bitSize.Maximum = new decimal(new int[] {
             128,
             0,
@@ -142,10 +143,11 @@
             this.ImagePanel.Name = "ImagePanel";
             this.ImagePanel.Size = new System.Drawing.Size(1444, 773);
             this.ImagePanel.TabIndex = 7;
+            this.ImagePanel.Resize += new System.EventHandler(this.ImagePanel_Resize);
             // 
             // btnHeyLena
             // 
-            this.btnHeyLena.Location = new System.Drawing.Point(562, 19);
+            this.btnHeyLena.Location = new System.Drawing.Point(666, 12);
             this.btnHeyLena.Name = "btnHeyLena";
             this.btnHeyLena.Size = new System.Drawing.Size(293, 20);
             this.btnHeyLena.TabIndex = 8;
@@ -155,21 +157,21 @@
             // 
             // readFileOffset
             // 
-            this.readFileOffset.Location = new System.Drawing.Point(905, 19);
+            this.readFileOffset.Location = new System.Drawing.Point(585, 19);
             this.readFileOffset.Maximum = new decimal(new int[] {
             10000000,
             0,
             0,
             0});
             this.readFileOffset.Name = "readFileOffset";
-            this.readFileOffset.Size = new System.Drawing.Size(120, 20);
+            this.readFileOffset.Size = new System.Drawing.Size(66, 20);
             this.readFileOffset.TabIndex = 9;
             this.readFileOffset.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged_1);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(433, 3);
+            this.label1.Location = new System.Drawing.Point(497, 3);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(45, 13);
             this.label1.TabIndex = 10;
@@ -187,7 +189,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(994, 3);
+            this.label3.Location = new System.Drawing.Point(582, 3);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(69, 13);
             this.label3.TabIndex = 12;
@@ -203,11 +205,22 @@
             this.vScrollBar1.TabIndex = 14;
             this.vScrollBar1.ValueChanged += new System.EventHandler(this.vScrollBar1_ValueChanged);
             // 
+            // lblTotalFrameSize
+            // 
+            this.lblTotalFrameSize.AutoSize = true;
+            this.lblTotalFrameSize.Location = new System.Drawing.Point(264, 23);
+            this.lblTotalFrameSize.Name = "lblTotalFrameSize";
+            this.lblTotalFrameSize.Size = new System.Drawing.Size(28, 13);
+            this.lblTotalFrameSize.TabIndex = 15;
+            this.lblTotalFrameSize.Text = "= 64";
+            this.lblTotalFrameSize.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1474, 815);
+            this.Controls.Add(this.lblTotalFrameSize);
             this.Controls.Add(this.vScrollBar1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -222,8 +235,6 @@
             this.Name = "Form1";
             this.Text = "BitViewer";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.Load += new System.EventHandler(this.Form1_Load);
-            this.ResizeEnd += new System.EventHandler(this.Form1_ResizeEnd);
             ((System.ComponentModel.ISupportInitialize)(this.FrameSize1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.FrameSize2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bitSize)).EndInit();
@@ -246,6 +257,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.VScrollBar vScrollBar1;
+        private System.Windows.Forms.Label lblTotalFrameSize;
     }
 }
 

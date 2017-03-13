@@ -22,21 +22,6 @@ namespace BitViewer
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         public static byte[] BitReverseTable =
         {
             0x00, 0x80, 0x40, 0xc0, 0x20, 0xa0, 0x60, 0xe0,
@@ -199,13 +184,21 @@ namespace BitViewer
             
         }
 
+        private void UpdateTotalFrameSize()
+        {
+            uint totalFrameSize = (uint)FrameSize1.Value * (uint)FrameSize2.Value;
+            lblTotalFrameSize.Text = String.Format("= {0}", totalFrameSize);
+        }
+
         private void FrameSize1_ValueChanged(object sender, EventArgs e)
         {
+            UpdateTotalFrameSize();
             RefreshBMP();
         }
 
         private void FrameSize2_ValueChanged(object sender, EventArgs e)
         {
+            UpdateTotalFrameSize();
             RefreshBMP();
         }
 
@@ -233,12 +226,12 @@ namespace BitViewer
             RefreshBMP();
         }
 
-        private void Form1_ResizeEnd(object sender, EventArgs e)
+        private void vScrollBar1_ValueChanged(object sender, EventArgs e)
         {
             RefreshBMP();
         }
 
-        private void vScrollBar1_ValueChanged(object sender, EventArgs e)
+        private void ImagePanel_Resize(object sender, EventArgs e)
         {
             RefreshBMP();
         }
