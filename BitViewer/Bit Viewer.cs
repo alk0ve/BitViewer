@@ -233,6 +233,7 @@ namespace BitViewer
 			RefreshBMP();
 		}
 
+		private void VScrollBar1_ValueChanged(object sender, EventArgs e)
 		{
 			RefreshBMP();
 		}
