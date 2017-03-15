@@ -7,3 +7,6 @@ new Name
 new load Icon
 PANEL DOUBLE BUFFERING SUCCESS (no flicker)
 mouse scroll enabled
+------------------------
+FUTURE:
+	create a PACKET class that can keep the orriginAL PACKET order

@@ -75,7 +75,7 @@ namespace BitViewer
             0,
             0});
             this.FrameSize1.Name = "FrameSize1";
-            this.FrameSize1.Size = new System.Drawing.Size(60, 22);
+            this.FrameSize1.Size = new System.Drawing.Size(60, 40);
             this.FrameSize1.TabIndex = 3;
             this.FrameSize1.Value = new decimal(new int[] {
             8,
@@ -98,7 +98,7 @@ namespace BitViewer
             0,
             0});
             this.FrameSize2.Name = "FrameSize2";
-            this.FrameSize2.Size = new System.Drawing.Size(60, 22);
+            this.FrameSize2.Size = new System.Drawing.Size(60, 40);
             this.FrameSize2.TabIndex = 4;
             this.FrameSize2.Value = new decimal(new int[] {
             1,
@@ -136,7 +136,7 @@ namespace BitViewer
             0,
             0});
             this.bitSize.Name = "bitSize";
-            this.bitSize.Size = new System.Drawing.Size(70, 22);
+            this.bitSize.Size = new System.Drawing.Size(70, 40);
             this.bitSize.TabIndex = 6;
             this.bitSize.Value = new decimal(new int[] {
             4,
@@ -153,7 +153,7 @@ namespace BitViewer
             this.ImagePanel.BackColor = System.Drawing.Color.Transparent;
             this.ImagePanel.Location = new System.Drawing.Point(0, 48);
             this.ImagePanel.Name = "ImagePanel";
-            this.ImagePanel.Size = new System.Drawing.Size(1699, 832);
+            this.ImagePanel.Size = new System.Drawing.Size(1985, 1057);
             this.ImagePanel.TabIndex = 7;
             this.ImagePanel.MouseEnter += new System.EventHandler(this.ImagePanel_MouseEnter);
             this.ImagePanel.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.ImagePanel_MouseWheel);
@@ -168,7 +168,7 @@ namespace BitViewer
             0,
             0});
             this.readFileOffset.Name = "readFileOffset";
-            this.readFileOffset.Size = new System.Drawing.Size(70, 22);
+            this.readFileOffset.Size = new System.Drawing.Size(70, 40);
             this.readFileOffset.TabIndex = 9;
             this.readFileOffset.ValueChanged += new System.EventHandler(this.ChopChanged);
             // 
@@ -177,7 +177,7 @@ namespace BitViewer
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(366, 3);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(56, 14);
+            this.label1.Size = new System.Drawing.Size(126, 33);
             this.label1.TabIndex = 10;
             this.label1.Text = "Bit Size:";
             // 
@@ -186,7 +186,7 @@ namespace BitViewer
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(144, 3);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(75, 14);
+            this.label2.Size = new System.Drawing.Size(174, 33);
             this.label2.TabIndex = 11;
             this.label2.Text = "Frame Size:";
             // 
@@ -195,7 +195,7 @@ namespace BitViewer
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(451, 3);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(43, 14);
+            this.label3.Size = new System.Drawing.Size(94, 33);
             this.label3.TabIndex = 12;
             this.label3.Text = "Chop:";
             // 
@@ -203,9 +203,9 @@ namespace BitViewer
             // 
             this.vScrollBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.vScrollBar1.Location = new System.Drawing.Point(1702, 48);
+            this.vScrollBar1.Location = new System.Drawing.Point(1988, 48);
             this.vScrollBar1.Name = "vScrollBar1";
-            this.vScrollBar1.Size = new System.Drawing.Size(18, 458);
+            this.vScrollBar1.Size = new System.Drawing.Size(18, 683);
             this.vScrollBar1.TabIndex = 14;
             this.vScrollBar1.ValueChanged += new System.EventHandler(this.VScrollBar1_ValueChanged);
             // 
@@ -214,7 +214,7 @@ namespace BitViewer
             this.lblTotalFrameSize.AutoSize = true;
             this.lblTotalFrameSize.Location = new System.Drawing.Point(267, 25);
             this.lblTotalFrameSize.Name = "lblTotalFrameSize";
-            this.lblTotalFrameSize.Size = new System.Drawing.Size(45, 14);
+            this.lblTotalFrameSize.Size = new System.Drawing.Size(101, 33);
             this.lblTotalFrameSize.TabIndex = 15;
             this.lblTotalFrameSize.Text = "Lorem";
             this.lblTotalFrameSize.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -224,7 +224,7 @@ namespace BitViewer
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(180, 23);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(15, 14);
+            this.label4.Size = new System.Drawing.Size(33, 33);
             this.label4.TabIndex = 16;
             this.label4.Text = "X";
             // 
@@ -247,7 +247,7 @@ namespace BitViewer
             0,
             0});
             this.sortStart.Name = "sortStart";
-            this.sortStart.Size = new System.Drawing.Size(53, 22);
+            this.sortStart.Size = new System.Drawing.Size(53, 40);
             this.sortStart.TabIndex = 18;
             // 
             // sortEnd
@@ -259,15 +259,15 @@ namespace BitViewer
             0,
             0});
             this.sortEnd.Name = "sortEnd";
-            this.sortEnd.Size = new System.Drawing.Size(53, 22);
+            this.sortEnd.Size = new System.Drawing.Size(53, 40);
             this.sortEnd.TabIndex = 19;
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(17F, 33F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SeaShell;
-            this.ClientSize = new System.Drawing.Size(1720, 508);
+            this.ClientSize = new System.Drawing.Size(2006, 733);
             this.Controls.Add(this.sortEnd);
             this.Controls.Add(this.sortStart);
             this.Controls.Add(this.Sort);

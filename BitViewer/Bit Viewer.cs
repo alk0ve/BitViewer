@@ -147,7 +147,7 @@ namespace BitViewer
             // set cursor to waiting
             Cursor.Current = Cursors.WaitCursor;
             int packetIndex = 0;
-            while (packetIndex<fileData.Count && currentChop >= fileData.ElementAt(packetIndex).Length)
+            while (packetIndex < fileData.Count && currentChop >= fileData.ElementAt(packetIndex).Length)
             {
                 currentChop -= fileData.ElementAt(packetIndex).Length;
                 packetIndex++;
@@ -162,11 +162,11 @@ namespace BitViewer
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             uint numLines = 0;
-            for (int j=packetIndex;j<fileData.Count;j++)
-                if (j==packetIndex)
-                    numLines+= ((uint)fileData.ElementAt(j).Length - (uint)currentChop + currentFrameSize - 1) / currentFrameSize;
+            for (int j = packetIndex; j < fileData.Count; j++)
+                if (j == packetIndex)
+                    numLines += ((uint)fileData.ElementAt(j).Length - (uint)currentChop + currentFrameSize - 1) / currentFrameSize;
                 else
-                    numLines+= ((uint)fileData.ElementAt(j).Length + currentFrameSize - 1) / currentFrameSize;
+                    numLines += ((uint)fileData.ElementAt(j).Length + currentFrameSize - 1) / currentFrameSize;
 
 
 
@@ -208,12 +208,12 @@ namespace BitViewer
 
                 // draw all them bits
                 int index = (int)currentFrameSize * (int)vScrollBar1.Value;
-                while (packetIndex<fileData.Count && index >= (fileData.ElementAt(packetIndex).Count-currentChop))
+                while (packetIndex < fileData.Count && index >= (fileData.ElementAt(packetIndex).Count - currentChop))
                 {
                     int skippedBits = (int)fileData.ElementAt(packetIndex).Count - (int)currentChop;
                     int skippedLines = (int)Math.Ceiling((double)skippedBits / (int)currentFrameSize);
                     int skippedSlots = skippedLines * skippedBits;
-                    index -= skippedLines*(int)currentFrameSize;
+                    index -= skippedLines * (int)currentFrameSize;
                     // we remove from the index all the lines we skipped, the bits we skipped + the empty slots remained in the line.
                     packetIndex++;
                     currentChop = 0;
@@ -329,11 +329,11 @@ namespace BitViewer
 
         private void Sort_Click(object sender, EventArgs e)
         {
-            decimal msb =sortStart.Value;
+            decimal msb = sortStart.Value;
             decimal lsb = sortEnd.Value;
             if (msb <= lsb)
                 fileData.Sort(
-                    delegate(BitArray arr1,BitArray arr2)
+                    delegate (BitArray arr1, BitArray arr2)
                      {
                          if (lsb > arr1.Length)
                          {
@@ -359,7 +359,7 @@ namespace BitViewer
                              return 0;
                          }
                      });
-                PaintBits();
+            PaintBits();
         }
     }
 }
