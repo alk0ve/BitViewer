@@ -1,0 +1,9 @@
+deleted LENA button
+fixed giant memory leak (BMP were not disposed of at all)
+chop all the bits too fast bug fix.
+complete color design rework
+new ICON
+new Name
+new load Icon
+PANEL DOUBLE BUFFERING SUCCESS (no flicker)
+mouse scroll enabled

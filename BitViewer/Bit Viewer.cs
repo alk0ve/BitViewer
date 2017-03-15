@@ -12,17 +12,76 @@ using System.Collections;
 
 namespace BitViewer
 {
-    public partial class Form1 : Form
-    {
-        BitArray gBits = null;
-        uint BASIC_BORDER_SIZE = 2;
 
-        public Form1()
+
+    public partial class MainForm : Form
+    {
+        List<BitArray> fileData = null;
+        Bitmap bitsBitmap = null;
+        string programName = "Manta Byte";
+
+        uint BASIC_BORDER_SIZE = 1;
+
+        public MainForm()
         {
             InitializeComponent();
+            UpdateTotalFrameSize();
+            this.Text = programName;
+
         }
 
-        public static byte[] BitReverseTable =
+        private void LoadBits_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            DialogResult result = openFileDialog1.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                string fileName = openFileDialog1.FileName;
+                if (fileName.ToLower().EndsWith(".pcap"))
+                {
+                    fileData = GetPacketsFromPcap(fileName);
+                }
+                else
+                {
+                    fileData = GetRawBitsFromFile(fileName);
+                }
+                this.Text = String.Format("{0} - {1}", programName, fileName);
+                PaintBits();
+
+            }
+
+
+        }
+        private List<BitArray> GetPacketsFromPcap(string fileName)
+        {
+            // LV structure, first 6*4 bytes are global header, Then 4*4bytes packet header - the last 4bytes in the header are the actual length.
+            byte[] bytesFromFile = File.ReadAllBytes(fileName);
+
+
+
+            List<BitArray> fileData = new List<BitArray>();
+            int index = 24;
+            int currentPacketLength;
+            while (index < bytesFromFile.Length)
+            {
+                Byte[] lengthFieldBytes = new Byte[4];
+                Array.Copy(bytesFromFile, index + 12, lengthFieldBytes, 0, 4);
+                //Array.Reverse(lengthFieldBytes);
+                currentPacketLength = System.BitConverter.ToInt32(lengthFieldBytes, 0);
+                Byte[] packetData = new Byte[currentPacketLength];
+                Array.Copy(bytesFromFile, index + 16, packetData, 0, currentPacketLength);
+                //rev8 all the bytes
+                REV8(packetData);
+                fileData.Add(new BitArray(packetData));
+                index += currentPacketLength + 16;
+            }
+            return fileData;
+        }
+
+        private void REV8(byte[] arr)
+        {
+            byte[] BitReverseTable =
         {
             0x00, 0x80, 0x40, 0xc0, 0x20, 0xa0, 0x60, 0xe0,
             0x10, 0x90, 0x50, 0xd0, 0x30, 0xb0, 0x70, 0xf0,
@@ -57,52 +116,59 @@ namespace BitViewer
             0x0f, 0x8f, 0x4f, 0xcf, 0x2f, 0xaf, 0x6f, 0xef,
             0x1f, 0x9f, 0x5f, 0xdf, 0x3f, 0xbf, 0x7f, 0xff
         };
-
-        private void LoadBits_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            DialogResult result = openFileDialog1.ShowDialog();
-
-            if (result == DialogResult.OK)
+            for (int i = 0; i < arr.Length; ++i)
             {
-                byte[] bytesFromFile = File.ReadAllBytes(openFileDialog1.FileName);
-
-                // rev8 all the bytes
-                for (int i = 0; i < bytesFromFile.Length; ++i)
-                {
-                    bytesFromFile[i] = BitReverseTable[bytesFromFile[i]];
-                }
-
-                gBits = new BitArray(bytesFromFile);
-                RefreshBMP();
-                this.Text = String.Format("BitViewer - {0}", openFileDialog1.FileName);
+                arr[i] = BitReverseTable[arr[i]];
             }
-
         }
 
-        private void RefreshBMP()
+        private List<BitArray> GetRawBitsFromFile(string fileName)
         {
-            if ((gBits == null) || (readFileOffset.Value >= gBits.Length))
+            byte[] bytesFromFile = File.ReadAllBytes(fileName);
+
+            // rev8 all the bytes
+            REV8(bytesFromFile);
+            List<BitArray> data = new List<BitArray>();
+            data.Add(new BitArray(bytesFromFile));
+            return data;
+        }
+
+        private void PaintBits()
+        {
+            decimal currentChop = readFileOffset.Value; // the chop value can change while drawing so we need a constant value for the painting process.
+            uint currentFrameSize = (uint)FrameSize1.Value * (uint)FrameSize2.Value;
+            if (fileData == null)
             {
                 // nothing to show
                 ImagePanel.BackgroundImage = new Bitmap(1, 1);
                 return;
             }
-
+            uint bitSizeInPixels = (uint)bitSize.Value;
             // set cursor to waiting
             Cursor.Current = Cursors.WaitCursor;
-            Application.DoEvents();
+            int packetIndex = 0;
+            while (packetIndex<fileData.Count && currentChop >= fileData.ElementAt(packetIndex).Length)
+            {
+                currentChop -= fileData.ElementAt(packetIndex).Length;
+                packetIndex++;
+            }
+            // now the chop refers to the current packet only
 
-            uint bitSizeInPixels = (uint)bitSize.Value;
+            uint visibleBitsPerLine = (uint)ImagePanel.Width / (BASIC_BORDER_SIZE + bitSizeInPixels);
+            uint visibleNumLines = (uint)ImagePanel.Height / (BASIC_BORDER_SIZE + (uint)bitSize.Value);
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // configure the scroll bars
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            uint visibleBitsPerLine = (uint)ImagePanel.Width / (BASIC_BORDER_SIZE + bitSizeInPixels);
-            uint visibleNumLines = (uint)ImagePanel.Height / (BASIC_BORDER_SIZE + (uint)bitSize.Value);
 
-            uint bitsPerLine = (uint)FrameSize1.Value * (uint)FrameSize2.Value;
-            uint numLines = ((uint)gBits.Length - (uint)readFileOffset.Value + bitsPerLine - 1) / bitsPerLine;
+            uint numLines = 0;
+            for (int j=packetIndex;j<fileData.Count;j++)
+                if (j==packetIndex)
+                    numLines+= ((uint)fileData.ElementAt(j).Length - (uint)currentChop + currentFrameSize - 1) / currentFrameSize;
+                else
+                    numLines+= ((uint)fileData.ElementAt(j).Length + currentFrameSize - 1) / currentFrameSize;
+
+
 
             // the maximum should be the number of bits we're not seeing
             if (numLines > visibleNumLines)
@@ -118,138 +184,182 @@ namespace BitViewer
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // Draw the currently visible bits
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-            Bitmap bitsBitmap = new Bitmap(ImagePanel.Width, ImagePanel.Height);
+            if (bitsBitmap != null) bitsBitmap.Dispose(); // added to prevent mem leaks of the Bitmap object
+            bitsBitmap = new Bitmap(ImagePanel.Width, ImagePanel.Height);
 
             SolidBrush currentBitBrush = null;
 
             using (Graphics g = Graphics.FromImage(bitsBitmap))
-            using (SolidBrush blueBrush = new SolidBrush(Color.Blue))
-            using (SolidBrush whiteBrush = new SolidBrush(Color.White))
-            using (SolidBrush grayBrush = new SolidBrush(Color.Gray))
-            using (SolidBrush redBrush = new SolidBrush(Color.Red))
+            using (SolidBrush blueBrush = new SolidBrush(Color.RoyalBlue))
+            using (SolidBrush whiteBrush = new SolidBrush(Color.SeaShell))
+            using (SolidBrush bgBrush = new SolidBrush(Color.Silver))
+            using (SolidBrush redBrush = new SolidBrush(Color.Firebrick))
             {
                 // draw background
-                g.FillRectangle(grayBrush, 0, 0, ImagePanel.Width, ImagePanel.Height);
+                g.FillRectangle(bgBrush, 0, 0, ImagePanel.Width, ImagePanel.Height);
 
                 // draw red lines between bytes
-                for (int i = 1; i < ((Math.Min(visibleBitsPerLine, bitsPerLine) + 7) / 8); ++i)
+                for (int i = 1; i < ((Math.Min(visibleBitsPerLine, currentFrameSize) + 7) / 8); ++i)
                 {
                     g.FillRectangle(redBrush, 8 * i * (bitSizeInPixels + BASIC_BORDER_SIZE) - BASIC_BORDER_SIZE,
                         0, 2, ImagePanel.Height);
                 }
 
-                IEnumerator iterator = gBits.GetEnumerator();
-                iterator.MoveNext(); // now points to the first element
-
-                // skip bits as needed
-                for (int i = 0; i < (readFileOffset.Value + bitsPerLine * vScrollBar1.Value); ++i)
-                {
-                    iterator.MoveNext();
-                }
 
                 // draw all them bits
-                bool iterationEnded = false;
-                for (int y = 0; y < visibleNumLines; ++y)
+                int index = (int)currentFrameSize * (int)vScrollBar1.Value;
+                while (packetIndex<fileData.Count && index >= (fileData.ElementAt(packetIndex).Count-currentChop))
                 {
-                    if (iterationEnded)
+                    int skippedBits = (int)fileData.ElementAt(packetIndex).Count - (int)currentChop;
+                    int skippedLines = (int)Math.Ceiling((double)skippedBits / (int)currentFrameSize);
+                    int skippedSlots = skippedLines * skippedBits;
+                    index -= skippedLines*(int)currentFrameSize;
+                    // we remove from the index all the lines we skipped, the bits we skipped + the empty slots remained in the line.
+                    packetIndex++;
+                    currentChop = 0;
+                }
+                index += (int)currentChop;
+                if (packetIndex < fileData.Count)
+                {
+                    for (int y = 0; y < visibleNumLines; ++y)
                     {
-                        break;
-                    }
-                    for (int x = 0; x < bitsPerLine; ++x)
-                    {
-                        if (x < visibleBitsPerLine)
+                        if (index >= fileData.ElementAt(packetIndex).Count)
                         {
-                            // draw a pixel
-                            if ((bool)iterator.Current)
-                            {
-                                currentBitBrush = blueBrush;
-                            }
-                            else
-                            {
-                                currentBitBrush = whiteBrush;
-                            }
-
-                            g.FillRectangle(currentBitBrush,
-                                    x * (bitSizeInPixels + BASIC_BORDER_SIZE),
-                                    y * (bitSizeInPixels + BASIC_BORDER_SIZE),
-                                    bitSizeInPixels,
-                                    bitSizeInPixels);
+                            currentChop = 0;
+                            index = 0;
+                            packetIndex++;
+                            if (packetIndex >= fileData.Count)
+                                break;
                         }
-                        // else we don't draw the pixel
-                        
-
-                        if (!iterator.MoveNext())
+                        for (int x = 0; x < currentFrameSize; ++x)
                         {
-                            iterationEnded = true;
-                            break;
+                            if (index >= fileData.ElementAt(packetIndex).Count)
+                                break;
+                            if (x < visibleBitsPerLine)
+                            {
+                                // draw a pixel
+                                if (fileData.ElementAt(packetIndex)[index])
+                                {
+                                    currentBitBrush = blueBrush;
+                                }
+                                else
+                                {
+                                    currentBitBrush = whiteBrush;
+                                }
+                                g.FillRectangle(currentBitBrush,
+                                        x * (bitSizeInPixels + BASIC_BORDER_SIZE),
+                                        y * (bitSizeInPixels + BASIC_BORDER_SIZE),
+                                        bitSizeInPixels,
+                                        bitSizeInPixels);
+                            }
+                            // else we don't draw the pixel
+                            index++;
                         }
                     }
                 }
             }
 
-            // set cursor to normal
-            Cursor.Current = Cursors.Default;
-            Application.DoEvents();
+
 
             // display image
-            // ImagePanel.Height = (int)(numLines * bitSizeInPixels);
-            // ImagePanel.Width = (int)(bitSizeInPixels * bitsPerLine);
             ImagePanel.BackgroundImage = bitsBitmap;
-            
+            // set cursor to normal
+            Cursor.Current = Cursors.Default;
+            //Application.DoEvents();
         }
 
         private void UpdateTotalFrameSize()
         {
             uint totalFrameSize = (uint)FrameSize1.Value * (uint)FrameSize2.Value;
-            lblTotalFrameSize.Text = String.Format("= {0}", totalFrameSize);
+            lblTotalFrameSize.Text = String.Format("={0}", totalFrameSize);
         }
 
         private void FrameSize1_ValueChanged(object sender, EventArgs e)
         {
             UpdateTotalFrameSize();
-            RefreshBMP();
+            PaintBits();
         }
 
         private void FrameSize2_ValueChanged(object sender, EventArgs e)
         {
             UpdateTotalFrameSize();
-            RefreshBMP();
+            PaintBits();
         }
 
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        private void BitSize_Changed(object sender, EventArgs e)
         {
-            RefreshBMP();
+            if (bitSize.Value < 12)
+                if (bitSize.Value < 5)
+                    BASIC_BORDER_SIZE = 0;
+                else
+                    BASIC_BORDER_SIZE = 1;
+            else
+                BASIC_BORDER_SIZE = 2;
+
+            PaintBits();
         }
 
-        private void btnHeyLena_Click(object sender, EventArgs e)
+        private void ChopChanged(object sender, EventArgs e)
         {
-            MessageBox.Show("NOW THAT THE CODE CHANGED, WHAT SHOULD THIS BUTTON DO?", "OH NO");
-            return;
-
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            DialogResult result = openFileDialog1.ShowDialog();
-            if (result == DialogResult.OK) // Test result.
-            {
-                // Stream st = new MemoryStream(File.ReadAllBytes(openFileDialog1.FileName));
-                // BitsPicture.Image = new Bitmap(st);
-            }
+            PaintBits();
         }
 
-        private void numericUpDown1_ValueChanged_1(object sender, EventArgs e)
+        private void VScrollBar1_ValueChanged(object sender, EventArgs e)
         {
-            RefreshBMP();
-        }
-
-        private void vScrollBar1_ValueChanged(object sender, EventArgs e)
-        {
-            RefreshBMP();
+            PaintBits();
         }
 
         private void ImagePanel_Resize(object sender, EventArgs e)
         {
-            RefreshBMP();
+            PaintBits();
+        }
+        private void ImagePanel_MouseEnter(object sender, EventArgs e)
+        {
+            ImagePanel.Focus();
+        }
+        private void ImagePanel_MouseWheel(object sender, MouseEventArgs e)
+        {
+            ImagePanel.Focus();
+            if (e.Delta < 0)
+            { vScrollBar1.Value = Math.Min(vScrollBar1.Maximum, vScrollBar1.Value + 1); }
+            else
+            { vScrollBar1.Value = Math.Max(vScrollBar1.Minimum, vScrollBar1.Value - 1); }
+
         }
 
+        private void Sort_Click(object sender, EventArgs e)
+        {
+            decimal msb =sortStart.Value;
+            decimal lsb = sortEnd.Value;
+            if (msb <= lsb)
+                fileData.Sort(
+                    delegate(BitArray arr1,BitArray arr2)
+                     {
+                         if (lsb > arr1.Length)
+                         {
+                             if (lsb > arr2.Length)
+                                 return 0;
+                             else
+                                 return -1;
+                         }
+                         else
+                         {
+                             if (lsb > arr2.Length)
+                                 return 1;
+                             else
+                                 for (int i = (int)msb; i <= lsb; i++)
+                                 {
+                                     if (arr1[i] != arr2[i])
+                                     {
+                                         if (arr1[i])
+                                             return 1;
+                                         return -1;
+                                     }
+                                 }
+                             return 0;
+                         }
+                     });
+                PaintBits();
+        }
     }
 }
