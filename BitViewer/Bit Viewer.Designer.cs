@@ -50,10 +50,15 @@ namespace BitViewer
             this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
             this.lblTotalFrameSize = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.Sort = new System.Windows.Forms.Button();
+            this.sortStart = new System.Windows.Forms.NumericUpDown();
+            this.sortEnd = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.FrameSize1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FrameSize2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bitSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.readFileOffset)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sortStart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sortEnd)).BeginInit();
             this.SuspendLayout();
             // 
             // FrameSize1
@@ -126,12 +131,12 @@ namespace BitViewer
             0,
             0});
             this.bitSize.Minimum = new decimal(new int[] {
-            2,
+            1,
             0,
             0,
             0});
             this.bitSize.Name = "bitSize";
-            this.bitSize.Size = new System.Drawing.Size(60, 22);
+            this.bitSize.Size = new System.Drawing.Size(70, 22);
             this.bitSize.TabIndex = 6;
             this.bitSize.Value = new decimal(new int[] {
             4,
@@ -150,9 +155,9 @@ namespace BitViewer
             this.ImagePanel.Name = "ImagePanel";
             this.ImagePanel.Size = new System.Drawing.Size(1699, 832);
             this.ImagePanel.TabIndex = 7;
-            this.ImagePanel.Resize += new System.EventHandler(this.ImagePanel_Resize);
             this.ImagePanel.MouseEnter += new System.EventHandler(this.ImagePanel_MouseEnter);
-            this.ImagePanel.MouseWheel += new MouseEventHandler(this.ImagePanel_MouseWheel); 
+            this.ImagePanel.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.ImagePanel_MouseWheel);
+            this.ImagePanel.Resize += new System.EventHandler(this.ImagePanel_Resize);
             // 
             // readFileOffset
             // 
@@ -163,7 +168,7 @@ namespace BitViewer
             0,
             0});
             this.readFileOffset.Name = "readFileOffset";
-            this.readFileOffset.Size = new System.Drawing.Size(60, 22);
+            this.readFileOffset.Size = new System.Drawing.Size(70, 22);
             this.readFileOffset.TabIndex = 9;
             this.readFileOffset.ValueChanged += new System.EventHandler(this.ChopChanged);
             // 
@@ -223,12 +228,49 @@ namespace BitViewer
             this.label4.TabIndex = 16;
             this.label4.Text = "X";
             // 
+            // Sort
+            // 
+            this.Sort.Location = new System.Drawing.Point(1043, 14);
+            this.Sort.Name = "Sort";
+            this.Sort.Size = new System.Drawing.Size(75, 23);
+            this.Sort.TabIndex = 17;
+            this.Sort.Text = "SORT";
+            this.Sort.UseVisualStyleBackColor = true;
+            this.Sort.Click += new System.EventHandler(this.Sort_Click);
+            // 
+            // sortStart
+            // 
+            this.sortStart.Location = new System.Drawing.Point(1140, 15);
+            this.sortStart.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.sortStart.Name = "sortStart";
+            this.sortStart.Size = new System.Drawing.Size(53, 22);
+            this.sortStart.TabIndex = 18;
+            // 
+            // sortEnd
+            // 
+            this.sortEnd.Location = new System.Drawing.Point(1220, 14);
+            this.sortEnd.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.sortEnd.Name = "sortEnd";
+            this.sortEnd.Size = new System.Drawing.Size(53, 22);
+            this.sortEnd.TabIndex = 19;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.SeaShell;
             this.ClientSize = new System.Drawing.Size(1720, 508);
+            this.Controls.Add(this.sortEnd);
+            this.Controls.Add(this.sortStart);
+            this.Controls.Add(this.Sort);
             this.Controls.Add(this.LoadBitsButton);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.lblTotalFrameSize);
@@ -245,12 +287,14 @@ namespace BitViewer
             this.ForeColor = System.Drawing.Color.DarkCyan;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
-            this.Text = "Manta Bite";
+            this.Text = "Lorem Ipsum";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             ((System.ComponentModel.ISupportInitialize)(this.FrameSize1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.FrameSize2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bitSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.readFileOffset)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sortStart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sortEnd)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -270,9 +314,12 @@ namespace BitViewer
         private VScrollBar vScrollBar1;
         private Label lblTotalFrameSize;
 		private Label label4;
-	}
+        private Button Sort;
+        private NumericUpDown sortStart;
+        private NumericUpDown sortEnd;
+    }
 
-	public class DoubleBufferedPanel : Panel
+    public class DoubleBufferedPanel : Panel
 	{
 		public DoubleBufferedPanel()
 		{
