@@ -56,6 +56,7 @@
     <Compile Include="Bit Viewer.Designer.cs">
       <DependentUpon>Bit Viewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Packet.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AskHowManyBits.resx">

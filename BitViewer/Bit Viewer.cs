@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
-using System.Collections;
 
 namespace BitViewer
 {
@@ -16,7 +11,35 @@ namespace BitViewer
 
     public partial class MainForm : Form
     {
-        List<BitArray> fileData = null;
+        //use arrow keys to navigate your bits
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (ImagePanel.Focused)
+            {
+                if (keyData == Keys.Left)
+                {
+                    hScrollBar1.Value = Math.Max(0,hScrollBar1.Value -1);
+                    return true;
+                }
+                if (keyData == Keys.Right)
+                {
+                    hScrollBar1.Value = Math.Min(hScrollBar1.Maximum, hScrollBar1.Value + 1);
+                    return true;
+                }
+                if (keyData == Keys.Up)
+                {
+                    vScrollBar1.Value = Math.Max(0, vScrollBar1.Value - 1);
+                    return true;
+                }
+                if (keyData == Keys.Down)
+                {
+                    vScrollBar1.Value = Math.Min(vScrollBar1.Maximum, vScrollBar1.Value + 1);
+                    return true;
+                }
+            }
+                return base.ProcessCmdKey(ref msg, keyData); ;
+        }
+        List<Packet> fileData = null;
         Bitmap bitsBitmap = null;
         string programName = "Manta Byte";
 
@@ -53,15 +76,13 @@ namespace BitViewer
 
 
         }
-        private List<BitArray> GetPacketsFromPcap(string fileName)
+        private List<Packet> GetPacketsFromPcap(string fileName)
         {
             // LV structure, first 6*4 bytes are global header, Then 4*4bytes packet header - the last 4bytes in the header are the actual length.
             byte[] bytesFromFile = File.ReadAllBytes(fileName);
-
-
-
-            List<BitArray> fileData = new List<BitArray>();
+            List<Packet> fileData = new List<Packet>();
             int index = 24;
+            int packetIndex = 0;
             int currentPacketLength;
             while (index < bytesFromFile.Length)
             {
@@ -73,8 +94,9 @@ namespace BitViewer
                 Array.Copy(bytesFromFile, index + 16, packetData, 0, currentPacketLength);
                 //rev8 all the bytes
                 REV8(packetData);
-                fileData.Add(new BitArray(packetData));
+                fileData.Add(new Packet(packetData, packetIndex));
                 index += currentPacketLength + 16;
+                packetIndex += 1;
             }
             return fileData;
         }
@@ -122,19 +144,19 @@ namespace BitViewer
             }
         }
 
-        private List<BitArray> GetRawBitsFromFile(string fileName)
+        private List<Packet> GetRawBitsFromFile(string fileName)
         {
             byte[] bytesFromFile = File.ReadAllBytes(fileName);
-
             // rev8 all the bytes
             REV8(bytesFromFile);
-            List<BitArray> data = new List<BitArray>();
-            data.Add(new BitArray(bytesFromFile));
+            List<Packet> data = new List<Packet>();
+            data.Add(new Packet(bytesFromFile, 0));
             return data;
         }
 
         private void PaintBits()
         {
+            if (ImagePanel.Width == 0) return;
             decimal currentChop = readFileOffset.Value; // the chop value can change while drawing so we need a constant value for the painting process.
             uint currentFrameSize = (uint)FrameSize1.Value * (uint)FrameSize2.Value;
             if (fileData == null)
@@ -147,14 +169,14 @@ namespace BitViewer
             // set cursor to waiting
             Cursor.Current = Cursors.WaitCursor;
             int packetIndex = 0;
-            while (packetIndex < fileData.Count && currentChop >= fileData.ElementAt(packetIndex).Length)
+            while (packetIndex < fileData.Count && currentChop >= fileData.ElementAt(packetIndex).data.Length)
             {
-                currentChop -= fileData.ElementAt(packetIndex).Length;
+                currentChop -= fileData.ElementAt(packetIndex).data.Length;
                 packetIndex++;
             }
             // now the chop refers to the current packet only
 
-            uint visibleBitsPerLine = (uint)ImagePanel.Width / (BASIC_BORDER_SIZE + bitSizeInPixels);
+            uint visibleBitsPerLine = ((uint)ImagePanel.Width-(uint)vScrollBar1.Width) / (BASIC_BORDER_SIZE + bitSizeInPixels);
             uint visibleNumLines = (uint)ImagePanel.Height / (BASIC_BORDER_SIZE + (uint)bitSize.Value);
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -164,12 +186,21 @@ namespace BitViewer
             uint numLines = 0;
             for (int j = packetIndex; j < fileData.Count; j++)
                 if (j == packetIndex)
-                    numLines += ((uint)fileData.ElementAt(j).Length - (uint)currentChop + currentFrameSize - 1) / currentFrameSize;
+                    numLines += ((uint)fileData.ElementAt(j).data.Length - (uint)currentChop + currentFrameSize - 1) / currentFrameSize;
                 else
-                    numLines += ((uint)fileData.ElementAt(j).Length + currentFrameSize - 1) / currentFrameSize;
+                    numLines += ((uint)fileData.ElementAt(j).data.Length + currentFrameSize - 1) / currentFrameSize;
 
-
-
+            // the scrollbar's max is set to the frame size if it is needed.
+            if (visibleBitsPerLine < currentFrameSize)
+            {
+                hScrollBar1.Maximum = (int)currentFrameSize- (int)visibleBitsPerLine;
+                hScrollBar1.Visible = true;
+            }
+            else
+            {
+                hScrollBar1.Value = 0;
+                hScrollBar1.Visible = false;
+            }
             // the maximum should be the number of bits we're not seeing
             if (numLines > visibleNumLines)
             {
@@ -178,6 +209,7 @@ namespace BitViewer
             }
             else
             {
+                vScrollBar1.Value = 0;
                 vScrollBar1.Visible = false;
             }
 
@@ -201,16 +233,17 @@ namespace BitViewer
                 // draw red lines between bytes
                 for (int i = 1; i < ((Math.Min(visibleBitsPerLine, currentFrameSize) + 7) / 8); ++i)
                 {
-                    g.FillRectangle(redBrush, 8 * i * (bitSizeInPixels + BASIC_BORDER_SIZE) - BASIC_BORDER_SIZE,
+                    g.FillRectangle(redBrush, (8*i-hScrollBar1.Value%8)*(bitSizeInPixels + BASIC_BORDER_SIZE) - BASIC_BORDER_SIZE,
                         0, 2, ImagePanel.Height);
                 }
 
 
                 // draw all them bits
                 int index = (int)currentFrameSize * (int)vScrollBar1.Value;
-                while (packetIndex < fileData.Count && index >= (fileData.ElementAt(packetIndex).Count - currentChop))
+                int packetLine = 0;
+                while (packetIndex < fileData.Count && index >= (fileData.ElementAt(packetIndex).data.Length - currentChop))
                 {
-                    int skippedBits = (int)fileData.ElementAt(packetIndex).Count - (int)currentChop;
+                    int skippedBits = (int)fileData.ElementAt(packetIndex).data.Count - (int)currentChop;
                     int skippedLines = (int)Math.Ceiling((double)skippedBits / (int)currentFrameSize);
                     int skippedSlots = skippedLines * skippedBits;
                     index -= skippedLines * (int)currentFrameSize;
@@ -219,26 +252,32 @@ namespace BitViewer
                     currentChop = 0;
                 }
                 index += (int)currentChop;
+                //packetIndex points to the packet the has to be displayed currently, index points to the first bitIndex to be found at the topmost visible row.
                 if (packetIndex < fileData.Count)
                 {
+                    //draw rows
                     for (int y = 0; y < visibleNumLines; ++y)
                     {
-                        if (index >= fileData.ElementAt(packetIndex).Count)
+                        if (index >= fileData.ElementAt(packetIndex).data.Count)
                         {
+
                             currentChop = 0;
                             index = 0;
                             packetIndex++;
+                            packetLine = 0;
                             if (packetIndex >= fileData.Count)
                                 break;
                         }
-                        for (int x = 0; x < currentFrameSize; ++x)
+                        //draw a row
+                        index += hScrollBar1.Value;
+                        for (int x = 0; x < currentFrameSize-hScrollBar1.Value; ++x)
                         {
-                            if (index >= fileData.ElementAt(packetIndex).Count)
+                            if (index >= fileData.ElementAt(packetIndex).data.Count)
                                 break;
                             if (x < visibleBitsPerLine)
                             {
                                 // draw a pixel
-                                if (fileData.ElementAt(packetIndex)[index])
+                                if (fileData.ElementAt(packetIndex).data[index])
                                 {
                                     currentBitBrush = blueBrush;
                                 }
@@ -255,6 +294,8 @@ namespace BitViewer
                             // else we don't draw the pixel
                             index++;
                         }
+                        
+
                     }
                 }
             }
@@ -309,6 +350,11 @@ namespace BitViewer
             PaintBits();
         }
 
+        private void HScrollBar1_ValueChanged(object sender, EventArgs e)
+        {
+            PaintBits();
+        }
+
         private void ImagePanel_Resize(object sender, EventArgs e)
         {
             PaintBits();
@@ -333,33 +379,40 @@ namespace BitViewer
             decimal lsb = sortEnd.Value;
             if (msb <= lsb)
                 fileData.Sort(
-                    delegate (BitArray arr1, BitArray arr2)
+                    delegate (Packet pac1, Packet pac2)
                      {
-                         if (lsb > arr1.Length)
+                         int indexDiff = pac1.index - pac2.index;
+                         if (lsb > pac1.data.Length)
                          {
-                             if (lsb > arr2.Length)
-                                 return 0;
+                             if (lsb > pac2.data.Length)
+                                 return indexDiff;
                              else
                                  return -1;
                          }
                          else
                          {
-                             if (lsb > arr2.Length)
+                             if (lsb > pac2.data.Length)
                                  return 1;
                              else
                                  for (int i = (int)msb; i <= lsb; i++)
                                  {
-                                     if (arr1[i] != arr2[i])
+                                     if (pac1.data[i] != pac2.data[i])
                                      {
-                                         if (arr1[i])
+                                         if (pac1.data[i])
                                              return 1;
                                          return -1;
                                      }
                                  }
-                             return 0;
+                             return indexDiff;
                          }
                      });
             PaintBits();
         }
+
+        private void ImagePanel_Clicked(object sender, EventArgs e)
+        {
+            ImagePanel.Focus();
+        }
+
     }
 }
