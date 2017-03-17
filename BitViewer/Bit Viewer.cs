@@ -18,7 +18,7 @@ namespace BitViewer
             {
                 if (keyData == Keys.Left)
                 {
-                    hScrollBar1.Value = Math.Max(0,hScrollBar1.Value -1);
+                    hScrollBar1.Value = Math.Max(0, hScrollBar1.Value - 1);
                     return true;
                 }
                 if (keyData == Keys.Right)
@@ -37,7 +37,7 @@ namespace BitViewer
                     return true;
                 }
             }
-                return base.ProcessCmdKey(ref msg, keyData); ;
+            return base.ProcessCmdKey(ref msg, keyData); ;
         }
         List<Packet> fileData = null;
         Bitmap bitsBitmap = null;
@@ -156,7 +156,7 @@ namespace BitViewer
 
         private void PaintBits()
         {
-            if (ImagePanel.Width == 0) return;
+            if (ImagePanel.Width * ImagePanel.Height == 0) return;
             decimal currentChop = readFileOffset.Value; // the chop value can change while drawing so we need a constant value for the painting process.
             uint currentFrameSize = (uint)FrameSize1.Value * (uint)FrameSize2.Value;
             if (fileData == null)
@@ -175,9 +175,10 @@ namespace BitViewer
                 packetIndex++;
             }
             // now the chop refers to the current packet only
-
-            uint visibleBitsPerLine = ((uint)ImagePanel.Width-(uint)vScrollBar1.Width) / (BASIC_BORDER_SIZE + bitSizeInPixels);
-            uint visibleNumLines = (uint)ImagePanel.Height / (BASIC_BORDER_SIZE + (uint)bitSize.Value);
+            uint effectivePanelWidth = vScrollBar1.Visible ? ((uint)ImagePanel.Width - (uint)vScrollBar1.Width) : (uint)ImagePanel.Width;
+            uint effectivePanelHeight = hScrollBar1.Visible ? ((uint)ImagePanel.Height - (uint)hScrollBar1.Height) : (uint)ImagePanel.Height;
+            uint visibleBitsPerLine = 1 + effectivePanelWidth / (BASIC_BORDER_SIZE + bitSizeInPixels);
+            uint visibleNumLines = 1 + effectivePanelHeight / (BASIC_BORDER_SIZE + (uint)bitSize.Value);
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // configure the scroll bars
@@ -191,9 +192,9 @@ namespace BitViewer
                     numLines += ((uint)fileData.ElementAt(j).data.Length + currentFrameSize - 1) / currentFrameSize;
 
             // the scrollbar's max is set to the frame size if it is needed.
-            if (visibleBitsPerLine < currentFrameSize)
+            if (visibleBitsPerLine - 1 < currentFrameSize)
             {
-                hScrollBar1.Maximum = (int)currentFrameSize- (int)visibleBitsPerLine;
+                hScrollBar1.Maximum = (int)currentFrameSize - (int)visibleBitsPerLine + 10;
                 hScrollBar1.Visible = true;
             }
             else
@@ -202,9 +203,9 @@ namespace BitViewer
                 hScrollBar1.Visible = false;
             }
             // the maximum should be the number of bits we're not seeing
-            if (numLines > visibleNumLines)
+            if (numLines - 1 > visibleNumLines)
             {
-                vScrollBar1.Maximum = (int)(numLines - visibleNumLines);
+                vScrollBar1.Maximum = (int)(numLines - visibleNumLines) + 10;
                 vScrollBar1.Visible = true;
             }
             else
@@ -220,27 +221,26 @@ namespace BitViewer
             bitsBitmap = new Bitmap(ImagePanel.Width, ImagePanel.Height);
 
             SolidBrush currentBitBrush = null;
-
             using (Graphics g = Graphics.FromImage(bitsBitmap))
             using (SolidBrush blueBrush = new SolidBrush(Color.RoyalBlue))
             using (SolidBrush whiteBrush = new SolidBrush(Color.SeaShell))
             using (SolidBrush bgBrush = new SolidBrush(Color.Silver))
             using (SolidBrush redBrush = new SolidBrush(Color.Firebrick))
+            using (SolidBrush packetBrush = new SolidBrush(Color.Turquoise))
             {
                 // draw background
                 g.FillRectangle(bgBrush, 0, 0, ImagePanel.Width, ImagePanel.Height);
 
                 // draw red lines between bytes
-                for (int i = 1; i < ((Math.Min(visibleBitsPerLine, currentFrameSize) + 7) / 8); ++i)
+                for (int i = 1; i <= ((Math.Min(visibleBitsPerLine, currentFrameSize) + 7) / 8); ++i)
                 {
-                    g.FillRectangle(redBrush, (8*i-hScrollBar1.Value%8)*(bitSizeInPixels + BASIC_BORDER_SIZE) - BASIC_BORDER_SIZE,
-                        0, 2, ImagePanel.Height);
+                    g.FillRectangle(redBrush, (8 * i - hScrollBar1.Value % 8) * (bitSizeInPixels + BASIC_BORDER_SIZE) - BASIC_BORDER_SIZE,
+                        0, BASIC_BORDER_SIZE, ImagePanel.Height);
                 }
 
 
                 // draw all them bits
                 int index = (int)currentFrameSize * (int)vScrollBar1.Value;
-                int packetLine = 0;
                 while (packetIndex < fileData.Count && index >= (fileData.ElementAt(packetIndex).data.Length - currentChop))
                 {
                     int skippedBits = (int)fileData.ElementAt(packetIndex).data.Count - (int)currentChop;
@@ -255,22 +255,24 @@ namespace BitViewer
                 //packetIndex points to the packet the has to be displayed currently, index points to the first bitIndex to be found at the topmost visible row.
                 if (packetIndex < fileData.Count)
                 {
+                    bool packetFinished;
                     //draw rows
                     for (int y = 0; y < visibleNumLines; ++y)
                     {
+                        packetFinished = false;
                         if (index >= fileData.ElementAt(packetIndex).data.Count)
                         {
 
                             currentChop = 0;
                             index = 0;
+                            packetFinished = true;
                             packetIndex++;
-                            packetLine = 0;
                             if (packetIndex >= fileData.Count)
                                 break;
                         }
                         //draw a row
                         index += hScrollBar1.Value;
-                        for (int x = 0; x < currentFrameSize-hScrollBar1.Value; ++x)
+                        for (int x = 0; x < currentFrameSize - hScrollBar1.Value; ++x)
                         {
                             if (index >= fileData.ElementAt(packetIndex).data.Count)
                                 break;
@@ -294,8 +296,7 @@ namespace BitViewer
                             // else we don't draw the pixel
                             index++;
                         }
-                        
-
+                        if (packetFinished) g.FillRectangle(packetBrush, 0, y * (bitSizeInPixels + BASIC_BORDER_SIZE)-1, ImagePanel.Width, BASIC_BORDER_SIZE);
                     }
                 }
             }
@@ -375,6 +376,8 @@ namespace BitViewer
 
         private void Sort_Click(object sender, EventArgs e)
         {
+            if (fileData == null)
+                return;
             decimal msb = sortStart.Value;
             decimal lsb = sortEnd.Value;
             if (msb <= lsb)
@@ -409,10 +412,46 @@ namespace BitViewer
             PaintBits();
         }
 
-        private void ImagePanel_Clicked(object sender, EventArgs e)
+        private void ImagePanel_MouseClick(object sender, MouseEventArgs e)
         {
             ImagePanel.Focus();
+            if (e.Button == MouseButtons.Right)
+            {
+                int col = hScrollBar1.Value + e.Location.X / (int)(bitSize.Value + BASIC_BORDER_SIZE);
+                int row = vScrollBar1.Value + e.Location.Y / (int)(bitSize.Value + BASIC_BORDER_SIZE);
+                string coordinates = "("+col.ToString() + "," + row.ToString()+")";
+                toolTip1.Show(coordinates, ImagePanel, e.Location,1234);
+                //MessageBox.Show(col.ToString() + ":" + row.ToString());
+            }
         }
 
+        private void sortStart_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void sortEnd_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+            //if (fileData == null) return;
+            //int max_packet_length = 0;
+            //foreach Packet p in fileData
+
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
