@@ -234,7 +234,6 @@ namespace BitViewer
             this.label1.TabIndex = 10;
             this.label1.Text = "Bit Size:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
@@ -248,7 +247,6 @@ namespace BitViewer
             this.label2.TabIndex = 11;
             this.label2.Text = "Frame Size:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // label3
             // 
@@ -261,7 +259,6 @@ namespace BitViewer
             this.label3.TabIndex = 12;
             this.label3.Text = "Chop:";
             this.label3.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // lblTotalFrameSize
             // 
@@ -324,7 +321,6 @@ namespace BitViewer
             this.sortStart.Name = "sortStart";
             this.sortStart.Size = new System.Drawing.Size(64, 41);
             this.sortStart.TabIndex = 18;
-            this.sortStart.ValueChanged += new System.EventHandler(this.sortStart_ValueChanged);
             // 
             // sortEnd
             // 
@@ -341,7 +337,6 @@ namespace BitViewer
             this.sortEnd.Name = "sortEnd";
             this.sortEnd.Size = new System.Drawing.Size(68, 41);
             this.sortEnd.TabIndex = 19;
-            this.sortEnd.ValueChanged += new System.EventHandler(this.sortEnd_ValueChanged);
             // 
             // tableLayoutPanel1
             // 

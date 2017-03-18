@@ -16,29 +16,59 @@ namespace BitViewer
         {
             if (ImagePanel.Focused)
             {
-                if (keyData == Keys.Left)
+                switch (keyData)
                 {
-                    hScrollBar1.Value = Math.Max(0, hScrollBar1.Value - 1);
-                    return true;
-                }
-                if (keyData == Keys.Right)
-                {
-                    hScrollBar1.Value = Math.Min(hScrollBar1.Maximum, hScrollBar1.Value + 1);
-                    return true;
-                }
-                if (keyData == Keys.Up)
-                {
-                    vScrollBar1.Value = Math.Max(0, vScrollBar1.Value - 1);
-                    return true;
-                }
-                if (keyData == Keys.Down)
-                {
-                    vScrollBar1.Value = Math.Min(vScrollBar1.Maximum, vScrollBar1.Value + 1);
-                    return true;
+                    case Keys.Left: return MoveLeft();
+                    case Keys.Right: return MoveRight();
+                    case Keys.Up: return MoveUp();
+                    case Keys.Down: return MoveDown();
+                    case Keys.Oemplus:
+                    case Keys.Add: return IncreaseBitSize();
+                    case Keys.OemMinus:
+                    case Keys.Subtract: return DecreaseBitSize();
                 }
             }
             return base.ProcessCmdKey(ref msg, keyData); ;
         }
+
+
+        private bool IncreaseBitSize()
+        {
+            bitSize.UpButton();
+            return true;
+        }
+
+        private bool DecreaseBitSize()
+        {
+            bitSize.DownButton();
+            return true;
+        }
+
+
+        private bool MoveDown()
+        {
+            vScrollBar1.Value = Math.Min(vScrollBar1.Maximum - 9, vScrollBar1.Value + 1);
+            return true;
+        }
+
+        private bool MoveUp()
+        {
+            vScrollBar1.Value = Math.Max(0, vScrollBar1.Value - 1);
+            return true;
+        }
+
+        private bool MoveRight()
+        {
+            hScrollBar1.Value = Math.Min(hScrollBar1.Maximum - 9, hScrollBar1.Value + 1);
+            return true;
+        }
+
+        private bool MoveLeft()
+        {
+            hScrollBar1.Value = Math.Max(0, hScrollBar1.Value - 1);
+            return true;
+        }
+
         List<Packet> fileData = null;
         Bitmap bitsBitmap = null;
         string programName = "Manta Byte";
@@ -287,16 +317,13 @@ namespace BitViewer
                                 {
                                     currentBitBrush = whiteBrush;
                                 }
-                                g.FillRectangle(currentBitBrush,
-                                        x * (bitSizeInPixels + BASIC_BORDER_SIZE),
-                                        y * (bitSizeInPixels + BASIC_BORDER_SIZE),
-                                        bitSizeInPixels,
-                                        bitSizeInPixels);
+                                g.FillRectangle(currentBitBrush, x * (bitSizeInPixels + BASIC_BORDER_SIZE),
+                                    y * (bitSizeInPixels + BASIC_BORDER_SIZE), bitSizeInPixels, bitSizeInPixels);
                             }
                             // else we don't draw the pixel
                             index++;
                         }
-                        if (packetFinished) g.FillRectangle(packetBrush, 0, y * (bitSizeInPixels + BASIC_BORDER_SIZE)-1, ImagePanel.Width, BASIC_BORDER_SIZE);
+                        if (packetFinished) g.FillRectangle(packetBrush, 0, y * (bitSizeInPixels + BASIC_BORDER_SIZE) - 1, ImagePanel.Width, BASIC_BORDER_SIZE);
                     }
                 }
             }
@@ -314,18 +341,17 @@ namespace BitViewer
         {
             uint totalFrameSize = (uint)FrameSize1.Value * (uint)FrameSize2.Value;
             lblTotalFrameSize.Text = String.Format("={0}", totalFrameSize);
+            PaintBits();
         }
 
         private void FrameSize1_ValueChanged(object sender, EventArgs e)
         {
             UpdateTotalFrameSize();
-            PaintBits();
         }
 
         private void FrameSize2_ValueChanged(object sender, EventArgs e)
         {
             UpdateTotalFrameSize();
-            PaintBits();
         }
 
         private void BitSize_Changed(object sender, EventArgs e)
@@ -348,6 +374,7 @@ namespace BitViewer
 
         private void VScrollBar1_ValueChanged(object sender, EventArgs e)
         {
+
             PaintBits();
         }
 
@@ -367,11 +394,9 @@ namespace BitViewer
         private void ImagePanel_MouseWheel(object sender, MouseEventArgs e)
         {
             ImagePanel.Focus();
-            if (e.Delta < 0)
-            { vScrollBar1.Value = Math.Min(vScrollBar1.Maximum, vScrollBar1.Value + 1); }
-            else
-            { vScrollBar1.Value = Math.Max(vScrollBar1.Minimum, vScrollBar1.Value - 1); }
-
+            if (vScrollBar1.Visible == false) return;
+            if (e.Delta < 0) MoveDown();
+            else MoveUp();
         }
 
         private void Sort_Click(object sender, EventArgs e)
@@ -419,39 +444,11 @@ namespace BitViewer
             {
                 int col = hScrollBar1.Value + e.Location.X / (int)(bitSize.Value + BASIC_BORDER_SIZE);
                 int row = vScrollBar1.Value + e.Location.Y / (int)(bitSize.Value + BASIC_BORDER_SIZE);
-                string coordinates = "("+col.ToString() + "," + row.ToString()+")";
-                toolTip1.Show(coordinates, ImagePanel, e.Location,1234);
+                string coordinates = "(" + col.ToString() + "," + row.ToString() + ")";
+                toolTip1.Show(coordinates, ImagePanel, e.Location, 1234);
                 //MessageBox.Show(col.ToString() + ":" + row.ToString());
             }
         }
 
-        private void sortStart_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void sortEnd_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-            //if (fileData == null) return;
-            //int max_packet_length = 0;
-            //foreach Packet p in fileData
-
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
