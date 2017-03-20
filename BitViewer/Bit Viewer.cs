@@ -407,34 +407,41 @@ namespace BitViewer
             decimal lsb = sortEnd.Value;
             if (msb <= lsb)
                 fileData.Sort(
-                    delegate (Packet pac1, Packet pac2)
-                     {
-                         int indexDiff = pac1.index - pac2.index;
-                         if (lsb > pac1.data.Length)
-                         {
-                             if (lsb > pac2.data.Length)
-                                 return indexDiff;
-                             else
-                                 return -1;
-                         }
-                         else
-                         {
-                             if (lsb > pac2.data.Length)
-                                 return 1;
-                             else
-                                 for (int i = (int)msb; i <= lsb; i++)
-                                 {
-                                     if (pac1.data[i] != pac2.data[i])
-                                     {
-                                         if (pac1.data[i])
-                                             return 1;
-                                         return -1;
-                                     }
-                                 }
-                             return indexDiff;
-                         }
-                     });
+                    Create_Packet_Comparison(msb, lsb));
             PaintBits();
+        }
+
+        private static Comparison<Packet> Create_Packet_Comparison(decimal msb, decimal lsb)
+        {
+            return delegate (Packet pac1, Packet pac2)
+            {
+                int indexDiff = pac1.index - pac2.index;
+                if (msb == -1)// returning to the initial ordering.
+                    return indexDiff;
+                if (lsb > pac1.data.Length)
+                {
+                    if (lsb > pac2.data.Length)
+                        return indexDiff;
+                    else
+                        return -1;
+                }
+                else
+                {
+                    if (lsb > pac2.data.Length)
+                        return 1;
+                    else
+                        for (int i = (int)msb; i <= lsb; i++)
+                        {
+                            if (pac1.data[i] != pac2.data[i])
+                            {
+                                if (pac1.data[i])
+                                    return 1;
+                                return -1;
+                            }
+                        }
+                    return indexDiff;
+                }
+            };
         }
 
         private void ImagePanel_MouseClick(object sender, MouseEventArgs e)
@@ -444,11 +451,18 @@ namespace BitViewer
             {
                 int col = hScrollBar1.Value + e.Location.X / (int)(bitSize.Value + BASIC_BORDER_SIZE);
                 int row = vScrollBar1.Value + e.Location.Y / (int)(bitSize.Value + BASIC_BORDER_SIZE);
-                string coordinates = "(" + col.ToString() + "," + row.ToString() + ")";
-                toolTip1.Show(coordinates, ImagePanel, e.Location, 1234);
+                string coordinates = (col/8).ToString() +": (" + col.ToString() + "," + row.ToString() + ")";
+                toolTip1.Show(coordinates, ImagePanel, e.Location.X+12,e.Location.Y-12, 1234);
                 //MessageBox.Show(col.ToString() + ":" + row.ToString());
             }
         }
 
+        private void Reset_Click(object sender, EventArgs e)
+        {
+            if (fileData == null)
+                return;
+            fileData.Sort(Create_Packet_Comparison(-1, -1));
+            PaintBits();
+        }
     }
 }
