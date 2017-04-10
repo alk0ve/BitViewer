@@ -296,7 +296,7 @@ namespace BitViewer
                             // else we don't draw the pixel
                             index++;
                         }
-                        if (packetFinished) g.FillRectangle(packetBrush, 0, y * (bitSizeInPixels + BASIC_BORDER_SIZE)-1, ImagePanel.Width, BASIC_BORDER_SIZE);
+                        if (packetFinished) g.FillRectangle(packetBrush, 0, y * (bitSizeInPixels + BASIC_BORDER_SIZE) - 1, ImagePanel.Width, BASIC_BORDER_SIZE);
                     }
                 }
             }
@@ -367,11 +367,31 @@ namespace BitViewer
         private void ImagePanel_MouseWheel(object sender, MouseEventArgs e)
         {
             ImagePanel.Focus();
-            if (e.Delta < 0)
-            { vScrollBar1.Value = Math.Min(vScrollBar1.Maximum, vScrollBar1.Value + 1); }
-            else
-            { vScrollBar1.Value = Math.Max(vScrollBar1.Minimum, vScrollBar1.Value - 1); }
 
+            if (ModifierKeys.HasFlag(Keys.Control))
+            {
+                // zoom
+                if (e.Delta < 0)
+                {
+                    bitSize.Value = Math.Max(bitSize.Value - 1, bitSize.Minimum);
+                }
+                else
+                {
+                    bitSize.Value = Math.Min(bitSize.Value + 1, bitSize.Maximum);
+                }
+            }
+            else
+            {
+                // scroll
+                if (e.Delta < 0)
+                {
+                    vScrollBar1.Value = Math.Min(vScrollBar1.Maximum, vScrollBar1.Value + 1);
+                }
+                else
+                {
+                    vScrollBar1.Value = Math.Max(vScrollBar1.Minimum, vScrollBar1.Value - 1);
+                }
+            }
         }
 
         private void Sort_Click(object sender, EventArgs e)
@@ -419,8 +439,8 @@ namespace BitViewer
             {
                 int col = hScrollBar1.Value + e.Location.X / (int)(bitSize.Value + BASIC_BORDER_SIZE);
                 int row = vScrollBar1.Value + e.Location.Y / (int)(bitSize.Value + BASIC_BORDER_SIZE);
-                string coordinates = "("+col.ToString() + "," + row.ToString()+")";
-                toolTip1.Show(coordinates, ImagePanel, e.Location,1234);
+                string coordinates = "(" + col.ToString() + "," + row.ToString() + ")";
+                toolTip1.Show(coordinates, ImagePanel, e.Location, 1234);
                 //MessageBox.Show(col.ToString() + ":" + row.ToString());
             }
         }
