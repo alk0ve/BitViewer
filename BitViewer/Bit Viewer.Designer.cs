@@ -86,7 +86,7 @@ namespace BitViewer
             0,
             0});
             this.FrameSize1.Name = "FrameSize1";
-            this.FrameSize1.Size = new System.Drawing.Size(88, 41);
+            this.FrameSize1.Size = new System.Drawing.Size(88, 22);
             this.FrameSize1.TabIndex = 3;
             this.FrameSize1.Value = new decimal(new int[] {
             8,
@@ -114,7 +114,7 @@ namespace BitViewer
             0,
             0});
             this.FrameSize2.Name = "FrameSize2";
-            this.FrameSize2.Size = new System.Drawing.Size(90, 41);
+            this.FrameSize2.Size = new System.Drawing.Size(90, 22);
             this.FrameSize2.TabIndex = 4;
             this.FrameSize2.Value = new decimal(new int[] {
             1,
@@ -158,7 +158,7 @@ namespace BitViewer
             0,
             0});
             this.bitSize.Name = "bitSize";
-            this.bitSize.Size = new System.Drawing.Size(109, 41);
+            this.bitSize.Size = new System.Drawing.Size(109, 22);
             this.bitSize.TabIndex = 6;
             this.bitSize.Value = new decimal(new int[] {
             4,
@@ -219,7 +219,7 @@ namespace BitViewer
             0,
             0});
             this.readFileOffset.Name = "readFileOffset";
-            this.readFileOffset.Size = new System.Drawing.Size(96, 41);
+            this.readFileOffset.Size = new System.Drawing.Size(96, 22);
             this.readFileOffset.TabIndex = 9;
             this.readFileOffset.ValueChanged += new System.EventHandler(this.ChopChanged);
             // 
@@ -227,10 +227,10 @@ namespace BitViewer
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(549, 7);
+            this.label1.Location = new System.Drawing.Point(549, 23);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(109, 33);
+            this.label1.Size = new System.Drawing.Size(52, 17);
             this.label1.TabIndex = 10;
             this.label1.Text = "Bit Size:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -241,10 +241,10 @@ namespace BitViewer
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
             this.tableLayoutPanel1.SetColumnSpan(this.label2, 3);
-            this.label2.Location = new System.Drawing.Point(113, 7);
+            this.label2.Location = new System.Drawing.Point(113, 23);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(160, 33);
+            this.label2.Size = new System.Drawing.Size(74, 17);
             this.label2.TabIndex = 11;
             this.label2.Text = "Frame Size:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -254,10 +254,10 @@ namespace BitViewer
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(678, 7);
+            this.label3.Location = new System.Drawing.Point(678, 23);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(96, 33);
+            this.label3.Size = new System.Drawing.Size(43, 17);
             this.label3.TabIndex = 12;
             this.label3.Text = "Chop:";
             this.label3.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -322,7 +322,7 @@ namespace BitViewer
             0,
             0});
             this.sortStart.Name = "sortStart";
-            this.sortStart.Size = new System.Drawing.Size(64, 41);
+            this.sortStart.Size = new System.Drawing.Size(64, 22);
             this.sortStart.TabIndex = 18;
             this.sortStart.ValueChanged += new System.EventHandler(this.sortStart_ValueChanged);
             // 
@@ -339,7 +339,7 @@ namespace BitViewer
             0,
             0});
             this.sortEnd.Name = "sortEnd";
-            this.sortEnd.Size = new System.Drawing.Size(68, 41);
+            this.sortEnd.Size = new System.Drawing.Size(68, 22);
             this.sortEnd.TabIndex = 19;
             this.sortEnd.ValueChanged += new System.EventHandler(this.sortEnd_ValueChanged);
             // 
@@ -383,7 +383,7 @@ namespace BitViewer
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 33F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(44)))), ((int)(((byte)(49)))));
             this.ClientSize = new System.Drawing.Size(959, 531);

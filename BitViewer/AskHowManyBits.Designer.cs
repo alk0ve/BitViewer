@@ -28,105 +28,140 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.BitsToReadInput = new System.Windows.Forms.NumericUpDown();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.numericUpDownLength = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.BitsToReadInput)).BeginInit();
+            this.btnOK = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.lblLength = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.numericUpDownOffset = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLength)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOffset)).BeginInit();
             this.SuspendLayout();
             // 
-            // BitsToReadInput
+            // numericUpDownLength
             // 
-            this.BitsToReadInput.BackColor = System.Drawing.Color.White;
-            this.BitsToReadInput.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.BitsToReadInput.Location = new System.Drawing.Point(82, 67);
-            this.BitsToReadInput.Maximum = new decimal(new int[] {
-            2147483647,
+            this.numericUpDownLength.BackColor = System.Drawing.Color.White;
+            this.numericUpDownLength.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.numericUpDownLength.Location = new System.Drawing.Point(123, 92);
+            this.numericUpDownLength.Maximum = new decimal(new int[] {
+            268435456,
             0,
             0,
             0});
-            this.BitsToReadInput.Name = "BitsToReadInput";
-            this.BitsToReadInput.Size = new System.Drawing.Size(175, 32);
-            this.BitsToReadInput.TabIndex = 0;
-            this.BitsToReadInput.Value = new decimal(new int[] {
-            1000000,
+            this.numericUpDownLength.Minimum = new decimal(new int[] {
+            1,
             0,
             0,
             0});
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.label1.Location = new System.Drawing.Point(12, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(97, 24);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Hey there!";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.label2.Location = new System.Drawing.Point(12, 33);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(331, 24);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "How many bits would you like to read?";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.numericUpDownLength.Name = "numericUpDownLength";
+            this.numericUpDownLength.Size = new System.Drawing.Size(175, 32);
+            this.numericUpDownLength.TabIndex = 0;
+            this.numericUpDownLength.Value = new decimal(new int[] {
+            1024,
+            0,
+            0,
+            0});
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.label3.Location = new System.Drawing.Point(13, 102);
+            this.label3.Location = new System.Drawing.Point(53, 137);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(314, 15);
+            this.label3.Size = new System.Drawing.Size(245, 15);
             this.label3.TabIndex = 3;
-            this.label3.Text = "Common wisdom - Don\'t read more than a few millions..";
+            this.label3.Text = "Currently limited at MAXINT/8 = 268435456.";
             this.label3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
-            // button1
+            // btnOK
             // 
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.button1.Location = new System.Drawing.Point(82, 134);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(223, 39);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "OK! I\'ve decided!";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.btnOK.Location = new System.Drawing.Point(12, 179);
+            this.btnOK.Name = "btnOK";
+            this.btnOK.Size = new System.Drawing.Size(165, 39);
+            this.btnOK.TabIndex = 4;
+            this.btnOK.Text = "OK";
+            this.btnOK.UseVisualStyleBackColor = true;
+            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.btnCancel.Location = new System.Drawing.Point(183, 179);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(161, 39);
+            this.btnCancel.TabIndex = 4;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // lblLength
+            // 
+            this.lblLength.AutoSize = true;
+            this.lblLength.Location = new System.Drawing.Point(15, 103);
+            this.lblLength.Name = "lblLength";
+            this.lblLength.Size = new System.Drawing.Size(102, 13);
+            this.lblLength.TabIndex = 5;
+            this.lblLength.Text = "Read length (bytes):";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(15, 49);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(99, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Read offset (bytes):";
+            // 
+            // numericUpDownOffset
+            // 
+            this.numericUpDownOffset.BackColor = System.Drawing.Color.White;
+            this.numericUpDownOffset.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.numericUpDownOffset.Location = new System.Drawing.Point(123, 38);
+            this.numericUpDownOffset.Maximum = new decimal(new int[] {
+            268435456,
+            0,
+            0,
+            0});
+            this.numericUpDownOffset.Name = "numericUpDownOffset";
+            this.numericUpDownOffset.Size = new System.Drawing.Size(175, 32);
+            this.numericUpDownOffset.TabIndex = 0;
+            this.numericUpDownOffset.Value = new decimal(new int[] {
+            1024,
+            0,
+            0,
+            0});
             // 
             // AskHowManyBits
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(356, 185);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
+            this.ClientSize = new System.Drawing.Size(356, 248);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.BitsToReadInput);
+            this.Controls.Add(this.lblLength);
+            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.btnOK);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.numericUpDownOffset);
+            this.Controls.Add(this.numericUpDownLength);
             this.Name = "AskHowManyBits";
-            this.Text = "AskHowManyBits";
-            ((System.ComponentModel.ISupportInitialize)(this.BitsToReadInput)).EndInit();
+            this.Text = "Set read offset and length";
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLength)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOffset)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button button1;
-        public System.Windows.Forms.NumericUpDown BitsToReadInput;
+        private System.Windows.Forms.Button btnOK;
+        public System.Windows.Forms.NumericUpDown numericUpDownLength;
+        private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Label lblLength;
+        private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.NumericUpDown numericUpDownOffset;
     }
 }

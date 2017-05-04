@@ -6,25 +6,21 @@ namespace BitViewer
     public partial class AskHowManyBits : Form
     {
         public bool pressedOK = false;
+
         public uint bitsToRead = 1000000;
         public AskHowManyBits()
         {
             InitializeComponent();
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void btnOK_Click(object sender, EventArgs e)
         {
-
+            DialogResult = DialogResult.OK;
         }
 
-        private void label3_Click(object sender, EventArgs e)
+        private void btnCancel_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            pressedOK = true;
+            DialogResult = DialogResult.Cancel;
         }
     }
 }

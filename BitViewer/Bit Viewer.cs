@@ -7,8 +7,6 @@ using System.IO;
 
 namespace BitViewer
 {
-
-
     public partial class MainForm : Form
     {
         //use arrow keys to navigate your bits
@@ -39,6 +37,8 @@ namespace BitViewer
             }
             return base.ProcessCmdKey(ref msg, keyData); ;
         }
+
+        long MAX_READ_LENGTH = (int.MaxValue / 8);
         List<Packet> fileData = null;
         Bitmap bitsBitmap = null;
         string programName = "Manta Byte";
@@ -69,9 +69,14 @@ namespace BitViewer
                 {
                     fileData = GetRawBitsFromFile(fileName);
                 }
+                if (fileData == null)
+                {
+                    // in case the user canceled 
+                    return;
+                }
+
                 this.Text = String.Format("{0} - {1}", programName, fileName);
                 PaintBits();
-
             }
 
 
@@ -146,8 +151,39 @@ namespace BitViewer
 
         private List<Packet> GetRawBitsFromFile(string fileName)
         {
-            byte[] bytesFromFile = File.ReadAllBytes(fileName);
-            // rev8 all the bytes
+            byte[] bytesFromFile;
+
+            // if the file is large enough - we'll need to ask the user which segment to open
+            FileInfo fileToOpen = new FileInfo(fileName);
+
+            
+            if (fileToOpen.Length < MAX_READ_LENGTH)
+            {
+                // file is small enough to read in its entirety
+                bytesFromFile = File.ReadAllBytes(fileName);
+            }
+            else
+            {
+                AskHowManyBits askForm = new AskHowManyBits();
+                askForm.numericUpDownOffset.Maximum = fileToOpen.Length - 1;
+
+                if (askForm.ShowDialog() == DialogResult.Cancel)
+                {
+                    return null;
+                }
+                decimal lengthToRead = askForm.numericUpDownLength.Value;
+
+
+                FileStream fileStream = File.OpenRead(fileName);
+                fileStream.Seek((long)askForm.numericUpDownOffset.Value, SeekOrigin.Begin);
+                long effectiveReadSize = Math.Min((long)askForm.numericUpDownLength.Value, (fileToOpen.Length - (long)askForm.numericUpDownOffset.Value));
+                bytesFromFile = new byte[effectiveReadSize];
+                // TODO: note that the last argument here must be int, so if
+                // we plan on reading more we'll need to work around this
+                fileStream.Read(bytesFromFile, 0, (int)effectiveReadSize);
+            }
+
+            // rev8 all the bytes!
             REV8(bytesFromFile);
             List<Packet> data = new List<Packet>();
             data.Add(new Packet(bytesFromFile, 0));
