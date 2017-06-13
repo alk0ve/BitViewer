@@ -9,7 +9,25 @@ namespace BitViewer
 {
     public partial class MainForm : Form
     {
-        //use arrow keys to navigate your bits
+
+        private int GetVisibleBitRowCount()
+        {
+            int effectivePanelHeight = Math.Max(0, hScrollBar1.Visible ? (ImagePanel.Height - hScrollBar1.Height) : ImagePanel.Height);
+            int visibleBitRowCount = 1 + (int)(effectivePanelHeight / (BASIC_BORDER_SIZE + (uint)bitSize.Value));
+            if (visibleBitRowCount <= 0)
+                throw new System.OverflowException("Number of visible bit rows exceeds int32.");
+            return visibleBitRowCount;
+        }
+        private int GetVisibleBitColumnCount()
+        {
+            int effectivePanelWidth = Math.Max(0, vScrollBar1.Visible ? (ImagePanel.Width - vScrollBar1.Width) : ImagePanel.Width);
+            int visibleBitColumnCount = 1 + (int)(effectivePanelWidth / (BASIC_BORDER_SIZE + (uint)bitSize.Value));
+            if (visibleBitColumnCount <= 0)
+                throw new System.OverflowException("Number of visible bit columns exceeds int32.");
+            return visibleBitColumnCount;
+        }
+
+        //use arrow and page keys to navigate your bits
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (ImagePanel.Focused)
@@ -21,7 +39,7 @@ namespace BitViewer
                 }
                 if (keyData == Keys.Right)
                 {
-                    hScrollBar1.Value = Math.Min(hScrollBar1.Maximum, hScrollBar1.Value + 1);
+                    hScrollBar1.Value = (int)Math.Min((uint)hScrollBar1.Maximum, (uint)hScrollBar1.Value + 1);
                     return true;
                 }
                 if (keyData == Keys.Up)
@@ -31,7 +49,17 @@ namespace BitViewer
                 }
                 if (keyData == Keys.Down)
                 {
-                    vScrollBar1.Value = Math.Min(vScrollBar1.Maximum, vScrollBar1.Value + 1);
+                    vScrollBar1.Value = (int)Math.Min((uint)vScrollBar1.Maximum, (uint)vScrollBar1.Value + 1);
+                    return true;
+                }
+                if (keyData == Keys.PageDown)
+                {
+                   vScrollBar1.Value = (int)Math.Min((uint)vScrollBar1.Maximum, (uint)vScrollBar1.Value + ((uint)GetVisibleBitRowCount())/2);
+                   return true;
+                }
+                if (keyData == Keys.PageUp)
+                {
+                    vScrollBar1.Value = Math.Max(0, vScrollBar1.Value - GetVisibleBitRowCount()/2);
                     return true;
                 }
             }
