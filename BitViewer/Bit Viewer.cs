@@ -239,10 +239,9 @@ namespace BitViewer
                 packetIndex++;
             }
             // now the chop refers to the current packet only
-            uint effectivePanelWidth = vScrollBar1.Visible ? ((uint)ImagePanel.Width - (uint)vScrollBar1.Width) : (uint)ImagePanel.Width;
-            uint effectivePanelHeight = hScrollBar1.Visible ? ((uint)ImagePanel.Height - (uint)hScrollBar1.Height) : (uint)ImagePanel.Height;
-            uint visibleBitsPerLine = 1 + effectivePanelWidth / (BASIC_BORDER_SIZE + bitSizeInPixels);
-            uint visibleNumLines = 1 + effectivePanelHeight / (BASIC_BORDER_SIZE + (uint)bitSize.Value);
+
+            int visibleBitsPerLine = GetVisibleBitColumnCount();
+            int visibleNumLines = GetVisibleBitRowCount();
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // configure the scroll bars
@@ -258,7 +257,7 @@ namespace BitViewer
             // the scrollbar's max is set to the frame size if it is needed.
             if (visibleBitsPerLine - 1 < currentFrameSize)
             {
-                hScrollBar1.Maximum = (int)currentFrameSize - (int)visibleBitsPerLine + 10;
+                hScrollBar1.Maximum = (int)currentFrameSize - visibleBitsPerLine + 10;
                 hScrollBar1.Visible = true;
             }
             else

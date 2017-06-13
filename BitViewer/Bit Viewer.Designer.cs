@@ -43,9 +43,6 @@ namespace BitViewer
             this.FrameSize2 = new System.Windows.Forms.NumericUpDown();
             this.LoadBitsButton = new System.Windows.Forms.Button();
             this.bitSize = new System.Windows.Forms.NumericUpDown();
-            this.ImagePanel = new BitViewer.DoubleBufferedPanel();
-            this.hScrollBar1 = new System.Windows.Forms.HScrollBar();
-            this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
             this.readFileOffset = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -57,14 +54,17 @@ namespace BitViewer
             this.sortEnd = new System.Windows.Forms.NumericUpDown();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.ImagePanel = new BitViewer.DoubleBufferedPanel();
+            this.hScrollBar1 = new System.Windows.Forms.HScrollBar();
+            this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
             ((System.ComponentModel.ISupportInitialize)(this.FrameSize1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FrameSize2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bitSize)).BeginInit();
-            this.ImagePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.readFileOffset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sortStart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sortEnd)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
+            this.ImagePanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // FrameSize1
@@ -166,46 +166,6 @@ namespace BitViewer
             0,
             0});
             this.bitSize.ValueChanged += new System.EventHandler(this.BitSize_Changed);
-            // 
-            // ImagePanel
-            // 
-            this.ImagePanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ImagePanel.AutoScroll = true;
-            this.ImagePanel.AutoSize = true;
-            this.ImagePanel.BackColor = System.Drawing.Color.Transparent;
-            this.ImagePanel.Controls.Add(this.hScrollBar1);
-            this.ImagePanel.Controls.Add(this.vScrollBar1);
-            this.ImagePanel.Location = new System.Drawing.Point(0, 80);
-            this.ImagePanel.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.ImagePanel.Name = "ImagePanel";
-            this.ImagePanel.Size = new System.Drawing.Size(960, 452);
-            this.ImagePanel.TabIndex = 0;
-            this.ImagePanel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ImagePanel_MouseClick);
-            this.ImagePanel.MouseEnter += new System.EventHandler(this.ImagePanel_MouseEnter);
-            this.ImagePanel.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.ImagePanel_MouseWheel);
-            this.ImagePanel.Resize += new System.EventHandler(this.ImagePanel_Resize);
-            // 
-            // hScrollBar1
-            // 
-            this.hScrollBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.hScrollBar1.Location = new System.Drawing.Point(0, 434);
-            this.hScrollBar1.Name = "hScrollBar1";
-            this.hScrollBar1.Size = new System.Drawing.Size(942, 18);
-            this.hScrollBar1.TabIndex = 21;
-            this.hScrollBar1.Visible = false;
-            this.hScrollBar1.ValueChanged += new System.EventHandler(this.HScrollBar1_ValueChanged);
-            // 
-            // vScrollBar1
-            // 
-            this.vScrollBar1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.vScrollBar1.Location = new System.Drawing.Point(942, 0);
-            this.vScrollBar1.Name = "vScrollBar1";
-            this.vScrollBar1.Size = new System.Drawing.Size(18, 452);
-            this.vScrollBar1.TabIndex = 14;
-            this.vScrollBar1.Visible = false;
-            this.vScrollBar1.ValueChanged += new System.EventHandler(this.VScrollBar1_ValueChanged);
             // 
             // readFileOffset
             // 
@@ -381,6 +341,46 @@ namespace BitViewer
             this.tableLayoutPanel1.Size = new System.Drawing.Size(965, 80);
             this.tableLayoutPanel1.TabIndex = 20;
             // 
+            // ImagePanel
+            // 
+            this.ImagePanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ImagePanel.AutoScroll = true;
+            this.ImagePanel.AutoSize = true;
+            this.ImagePanel.BackColor = System.Drawing.Color.Transparent;
+            this.ImagePanel.Controls.Add(this.hScrollBar1);
+            this.ImagePanel.Controls.Add(this.vScrollBar1);
+            this.ImagePanel.Location = new System.Drawing.Point(0, 80);
+            this.ImagePanel.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.ImagePanel.Name = "ImagePanel";
+            this.ImagePanel.Size = new System.Drawing.Size(960, 452);
+            this.ImagePanel.TabIndex = 0;
+            this.ImagePanel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ImagePanel_MouseClick);
+            this.ImagePanel.MouseEnter += new System.EventHandler(this.ImagePanel_MouseEnter);
+            this.ImagePanel.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.ImagePanel_MouseWheel);
+            this.ImagePanel.Resize += new System.EventHandler(this.ImagePanel_Resize);
+            // 
+            // hScrollBar1
+            // 
+            this.hScrollBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.hScrollBar1.Location = new System.Drawing.Point(0, 434);
+            this.hScrollBar1.Name = "hScrollBar1";
+            this.hScrollBar1.Size = new System.Drawing.Size(942, 18);
+            this.hScrollBar1.TabIndex = 21;
+            this.hScrollBar1.Visible = false;
+            this.hScrollBar1.ValueChanged += new System.EventHandler(this.HScrollBar1_ValueChanged);
+            // 
+            // vScrollBar1
+            // 
+            this.vScrollBar1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.vScrollBar1.Location = new System.Drawing.Point(942, 0);
+            this.vScrollBar1.Name = "vScrollBar1";
+            this.vScrollBar1.Size = new System.Drawing.Size(18, 452);
+            this.vScrollBar1.TabIndex = 14;
+            this.vScrollBar1.Visible = false;
+            this.vScrollBar1.ValueChanged += new System.EventHandler(this.VScrollBar1_ValueChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -399,12 +399,12 @@ namespace BitViewer
             ((System.ComponentModel.ISupportInitialize)(this.FrameSize1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.FrameSize2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bitSize)).EndInit();
-            this.ImagePanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.readFileOffset)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sortStart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sortEnd)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.ImagePanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
