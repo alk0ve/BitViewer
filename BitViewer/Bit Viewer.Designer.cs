@@ -94,6 +94,7 @@ namespace BitViewer
             0,
             0});
             this.FrameSize1.ValueChanged += new System.EventHandler(this.FrameSize1_ValueChanged);
+            this.FrameSize1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.FrameSize1_KeyPress);
             // 
             // FrameSize2
             // 
@@ -122,6 +123,7 @@ namespace BitViewer
             0,
             0});
             this.FrameSize2.ValueChanged += new System.EventHandler(this.FrameSize2_ValueChanged);
+            this.FrameSize2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.FrameSize2_KeyPress);
             // 
             // LoadBitsButton
             // 
