@@ -379,8 +379,11 @@ namespace BitViewer
             lblTotalFrameSize.Text = String.Format("={0}", totalFrameSize);
         }
 
+        #region Winform Control Event Handlers
+
         private void FrameSize1_ValueChanged(object sender, EventArgs e)
         {
+            FrameSize1.Value = (decimal)(int)FrameSize1.Value;
             UpdateTotalFrameSize();
             PaintBits();
         }
@@ -536,5 +539,25 @@ namespace BitViewer
         {
 
         }
+
+        private void FrameSize1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            //block non numeric input
+            if (e.KeyChar < '0' || e.KeyChar > '9')
+                //allow backspaces
+                if (e.KeyChar != '\x08')
+                    e.Handled = true;
+        }
+
+        private void FrameSize2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            //block non numeric input
+            if (e.KeyChar < '0' || e.KeyChar > '9')
+                //allow backspaces
+                if (e.KeyChar != '\x08')
+                    e.Handled = true;
+        }
+
+        #endregion
     }
 }
