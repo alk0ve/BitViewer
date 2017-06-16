@@ -383,7 +383,6 @@ namespace BitViewer
 
         private void FrameSize1_ValueChanged(object sender, EventArgs e)
         {
-            FrameSize1.Value = (decimal)(int)FrameSize1.Value;
             UpdateTotalFrameSize();
             PaintBits();
         }
@@ -428,7 +427,7 @@ namespace BitViewer
         }
         private void ImagePanel_MouseEnter(object sender, EventArgs e)
         {
-            ImagePanel.Focus();
+           // ImagePanel.Focus(); //removed forces focus upon mouseover
         }
         private void ImagePanel_MouseWheel(object sender, MouseEventArgs e)
         {
