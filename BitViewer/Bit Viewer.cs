@@ -295,9 +295,10 @@ namespace BitViewer
                 g.FillRectangle(bgBrush, 0, 0, ImagePanel.Width, ImagePanel.Height);
 
                 // draw red lines between bytes
-                for (int i = 1; i <= ((Math.Min(visibleBitsPerLine, currentFrameSize) + 7) / 8); ++i)
+                int grid_spacing = (int)GridSpacing.Value;
+                for (int i = 1; i <= ((Math.Min(visibleBitsPerLine, currentFrameSize) + (grid_spacing-1)) / grid_spacing); ++i)
                 {
-                    g.FillRectangle(redBrush, (8 * i - hScrollBar1.Value % 8) * (bitSizeInPixels + BASIC_BORDER_SIZE) - BASIC_BORDER_SIZE,
+                    g.FillRectangle(redBrush, (grid_spacing * i - hScrollBar1.Value % grid_spacing) * (bitSizeInPixels + BASIC_BORDER_SIZE) - BASIC_BORDER_SIZE,
                         0, BASIC_BORDER_SIZE, ImagePanel.Height);
                 }
 
@@ -403,6 +404,11 @@ namespace BitViewer
             else
                 BASIC_BORDER_SIZE = 2;
 
+            PaintBits();
+        }
+
+        private void GridSpacing_ValueChanged(object sender, EventArgs e)
+        {
             PaintBits();
         }
 
@@ -557,6 +563,17 @@ namespace BitViewer
                     e.Handled = true;
         }
 
+        private void GridSpacing_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            //block non numeric input
+            if (e.KeyChar < '0' || e.KeyChar > '9')
+                //allow backspaces
+                if (e.KeyChar != '\x08')
+                    e.Handled = true;
+        }
+
+
         #endregion
+
     }
 }
