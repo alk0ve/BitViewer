@@ -53,6 +53,8 @@ namespace BitViewer
             this.sortStart = new System.Windows.Forms.NumericUpDown();
             this.sortEnd = new System.Windows.Forms.NumericUpDown();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.GridSpacing = new System.Windows.Forms.NumericUpDown();
+            this.labelGrid = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.ImagePanel = new BitViewer.DoubleBufferedPanel();
             this.hScrollBar1 = new System.Windows.Forms.HScrollBar();
@@ -64,6 +66,7 @@ namespace BitViewer
             ((System.ComponentModel.ISupportInitialize)(this.sortStart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sortEnd)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.GridSpacing)).BeginInit();
             this.ImagePanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -86,7 +89,7 @@ namespace BitViewer
             0,
             0});
             this.FrameSize1.Name = "FrameSize1";
-            this.FrameSize1.Size = new System.Drawing.Size(88, 22);
+            this.FrameSize1.Size = new System.Drawing.Size(89, 22);
             this.FrameSize1.TabIndex = 3;
             this.FrameSize1.Value = new decimal(new int[] {
             8,
@@ -102,7 +105,7 @@ namespace BitViewer
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.FrameSize2.AutoSize = true;
-            this.FrameSize2.Location = new System.Drawing.Point(227, 43);
+            this.FrameSize2.Location = new System.Drawing.Point(228, 43);
             this.FrameSize2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.FrameSize2.Maximum = new decimal(new int[] {
             1000000000,
@@ -227,11 +230,9 @@ namespace BitViewer
             // 
             // lblTotalFrameSize
             // 
-            this.lblTotalFrameSize.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.lblTotalFrameSize.BackColor = System.Drawing.Color.Transparent;
             this.lblTotalFrameSize.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblTotalFrameSize.Location = new System.Drawing.Point(319, 40);
+            this.lblTotalFrameSize.Location = new System.Drawing.Point(320, 40);
             this.lblTotalFrameSize.Margin = new System.Windows.Forms.Padding(0);
             this.lblTotalFrameSize.Name = "lblTotalFrameSize";
             this.lblTotalFrameSize.Padding = new System.Windows.Forms.Padding(0, 6, 0, 0);
@@ -246,7 +247,7 @@ namespace BitViewer
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
             this.label4.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.label4.Location = new System.Drawing.Point(205, 40);
+            this.label4.Location = new System.Drawing.Point(206, 40);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
             this.label4.Padding = new System.Windows.Forms.Padding(0, 6, 0, 0);
@@ -263,10 +264,10 @@ namespace BitViewer
             this.tableLayoutPanel1.SetColumnSpan(this.Sort, 2);
             this.Sort.Font = new System.Drawing.Font("Century Gothic", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Sort.ForeColor = System.Drawing.Color.Black;
-            this.Sort.Location = new System.Drawing.Point(827, 3);
+            this.Sort.Location = new System.Drawing.Point(828, 3);
             this.Sort.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Sort.Name = "Sort";
-            this.Sort.Size = new System.Drawing.Size(136, 34);
+            this.Sort.Size = new System.Drawing.Size(135, 34);
             this.Sort.TabIndex = 17;
             this.Sort.Text = "SORT";
             this.Sort.UseVisualStyleBackColor = true;
@@ -276,7 +277,7 @@ namespace BitViewer
             // 
             this.sortStart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sortStart.Location = new System.Drawing.Point(827, 43);
+            this.sortStart.Location = new System.Drawing.Point(828, 43);
             this.sortStart.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.sortStart.Maximum = new decimal(new int[] {
             10000,
@@ -293,7 +294,7 @@ namespace BitViewer
             this.sortEnd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sortEnd.AutoSize = true;
-            this.sortEnd.Location = new System.Drawing.Point(895, 43);
+            this.sortEnd.Location = new System.Drawing.Point(896, 43);
             this.sortEnd.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.sortEnd.Maximum = new decimal(new int[] {
             10000,
@@ -301,7 +302,7 @@ namespace BitViewer
             0,
             0});
             this.sortEnd.Name = "sortEnd";
-            this.sortEnd.Size = new System.Drawing.Size(68, 22);
+            this.sortEnd.Size = new System.Drawing.Size(67, 22);
             this.sortEnd.TabIndex = 19;
             this.sortEnd.ValueChanged += new System.EventHandler(this.sortEnd_ValueChanged);
             // 
@@ -312,29 +313,32 @@ namespace BitViewer
             this.tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.tableLayoutPanel1.BackColor = System.Drawing.Color.Black;
             this.tableLayoutPanel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.tableLayoutPanel1.ColumnCount = 9;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 11.51188F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 9.632604F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 2.29068F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 9.80881F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23.67036F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.41293F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15.5252F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 7.071741F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 7.075788F));
+            this.tableLayoutPanel1.ColumnCount = 10;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 11.51192F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 9.632639F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 2.290688F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 9.808846F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.53886F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10.98446F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.41298F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15.52526F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 7.071767F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 7.075814F));
             this.tableLayoutPanel1.Controls.Add(this.LoadBitsButton, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.sortEnd, 8, 1);
-            this.tableLayoutPanel1.Controls.Add(this.sortStart, 7, 1);
-            this.tableLayoutPanel1.Controls.Add(this.Sort, 7, 0);
+            this.tableLayoutPanel1.Controls.Add(this.sortEnd, 9, 1);
+            this.tableLayoutPanel1.Controls.Add(this.sortStart, 8, 1);
+            this.tableLayoutPanel1.Controls.Add(this.Sort, 8, 0);
             this.tableLayoutPanel1.Controls.Add(this.FrameSize2, 3, 1);
-            this.tableLayoutPanel1.Controls.Add(this.readFileOffset, 6, 1);
-            this.tableLayoutPanel1.Controls.Add(this.label3, 6, 0);
+            this.tableLayoutPanel1.Controls.Add(this.readFileOffset, 7, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label3, 7, 0);
             this.tableLayoutPanel1.Controls.Add(this.lblTotalFrameSize, 4, 1);
-            this.tableLayoutPanel1.Controls.Add(this.label1, 5, 0);
-            this.tableLayoutPanel1.Controls.Add(this.bitSize, 5, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label1, 6, 0);
+            this.tableLayoutPanel1.Controls.Add(this.bitSize, 6, 1);
             this.tableLayoutPanel1.Controls.Add(this.label2, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.label4, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.FrameSize1, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.GridSpacing, 5, 1);
+            this.tableLayoutPanel1.Controls.Add(this.labelGrid, 5, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
@@ -342,6 +346,41 @@ namespace BitViewer
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(965, 80);
             this.tableLayoutPanel1.TabIndex = 20;
+            // 
+            // GridSpacing
+            // 
+            this.GridSpacing.Dock = System.Windows.Forms.DockStyle.Left;
+            this.GridSpacing.Location = new System.Drawing.Point(444, 43);
+            this.GridSpacing.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.GridSpacing.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.GridSpacing.Name = "GridSpacing";
+            this.GridSpacing.Size = new System.Drawing.Size(67, 22);
+            this.GridSpacing.TabIndex = 20;
+            this.GridSpacing.Value = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+            this.GridSpacing.ValueChanged += new System.EventHandler(this.GridSpacing_ValueChanged);
+            this.GridSpacing.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.GridSpacing_KeyPress);
+            // 
+            // labelGrid
+            // 
+            this.labelGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelGrid.AutoSize = true;
+            this.labelGrid.Location = new System.Drawing.Point(444, 23);
+            this.labelGrid.Name = "labelGrid";
+            this.labelGrid.Size = new System.Drawing.Size(33, 17);
+            this.labelGrid.TabIndex = 21;
+            this.labelGrid.Text = "Grid";
             // 
             // ImagePanel
             // 
@@ -406,6 +445,7 @@ namespace BitViewer
             ((System.ComponentModel.ISupportInitialize)(this.sortEnd)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.GridSpacing)).EndInit();
             this.ImagePanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -432,6 +472,8 @@ namespace BitViewer
         private HScrollBar hScrollBar1;
         private TableLayoutPanel tableLayoutPanel1;
         private ToolTip toolTip1;
+        private NumericUpDown GridSpacing;
+        private Label labelGrid;
     }
 
     public class DoubleBufferedPanel : Panel
