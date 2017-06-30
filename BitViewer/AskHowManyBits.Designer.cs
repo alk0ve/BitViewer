@@ -62,6 +62,7 @@
             0,
             0,
             0});
+            this.numericUpDownLength.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.numericUpDownLength_KeyPress);
             // 
             // label3
             // 
@@ -133,6 +134,7 @@
             0,
             0,
             0});
+            this.numericUpDownOffset.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.numericUpDownOffset_KeyPress);
             // 
             // AskHowManyBits
             // 

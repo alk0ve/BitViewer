@@ -285,10 +285,10 @@ namespace BitViewer
 
             SolidBrush currentBitBrush = null;
             using (Graphics g = Graphics.FromImage(bitsBitmap))
-            using (SolidBrush blueBrush = new SolidBrush(Color.RoyalBlue))
-            using (SolidBrush whiteBrush = new SolidBrush(Color.SeaShell))
+            using (SolidBrush oneBrush = new SolidBrush(Color.RoyalBlue))
+            using (SolidBrush zeroBrush = new SolidBrush(Color.SeaShell))
             using (SolidBrush bgBrush = new SolidBrush(Color.Silver))
-            using (SolidBrush redBrush = new SolidBrush(Color.Firebrick))
+            using (SolidBrush gridBrush = new SolidBrush(Color.Firebrick))
             using (SolidBrush packetBrush = new SolidBrush(Color.Turquoise))
             {
                 // draw background
@@ -298,7 +298,7 @@ namespace BitViewer
                 int grid_spacing = (int)GridSpacing.Value;
                 for (int i = 1; i <= ((Math.Min(visibleBitsPerLine, currentFrameSize) + (grid_spacing-1)) / grid_spacing); ++i)
                 {
-                    g.FillRectangle(redBrush, (grid_spacing * i - hScrollBar1.Value % grid_spacing) * (bitSizeInPixels + BASIC_BORDER_SIZE) - BASIC_BORDER_SIZE,
+                    g.FillRectangle(gridBrush, (grid_spacing * i - hScrollBar1.Value % grid_spacing) * (bitSizeInPixels + BASIC_BORDER_SIZE) - BASIC_BORDER_SIZE,
                         0, BASIC_BORDER_SIZE, ImagePanel.Height);
                 }
 
@@ -345,11 +345,11 @@ namespace BitViewer
                                 // draw a pixel
                                 if (fileData.ElementAt(packetIndex).data[index])
                                 {
-                                    currentBitBrush = blueBrush;
+                                    currentBitBrush = oneBrush;
                                 }
                                 else
                                 {
-                                    currentBitBrush = whiteBrush;
+                                    currentBitBrush = zeroBrush;
                                 }
                                 g.FillRectangle(currentBitBrush,
                                         x * (bitSizeInPixels + BASIC_BORDER_SIZE),

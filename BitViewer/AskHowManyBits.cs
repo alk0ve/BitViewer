@@ -22,5 +22,23 @@ namespace BitViewer
         {
             DialogResult = DialogResult.Cancel;
         }
+
+        private void numericUpDownOffset_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            //block non numeric input
+            if (e.KeyChar < '0' || e.KeyChar > '9')
+                //allow backspaces
+                if (e.KeyChar != '\x08')
+                    e.Handled = true;
+        }
+
+        private void numericUpDownLength_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            //block non numeric input
+            if (e.KeyChar < '0' || e.KeyChar > '9')
+                //allow backspaces
+                if (e.KeyChar != '\x08')
+                    e.Handled = true;
+        }
     }
 }
