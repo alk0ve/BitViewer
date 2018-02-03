@@ -1,8 +1,8 @@
-BitViewer is a simple bit exploration tool, originally written by an author that chose to remain anonymous.
+BitViewer is a simple bit exploration tool for packets.
 
 Future plans
 =======================
- - ?
+See currently open issues.
 
 
 Collaboration
@@ -17,3 +17,9 @@ Collaboration
 Glorious bits!
 =======================
 Indeed they are.
+
+
+
+BitViewer for large files
+=======================
+BitViewer used to support large files as well as packet-based traffic; this functionality was forked into https://github.com/alk0ve/FileBitViewer.
