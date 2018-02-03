@@ -91,6 +91,7 @@ namespace BitViewer
             this.FrameSize1.Name = "FrameSize1";
             this.FrameSize1.Size = new System.Drawing.Size(89, 22);
             this.FrameSize1.TabIndex = 3;
+            this.FrameSize1.ThousandsSeparator = true;
             this.FrameSize1.Value = new decimal(new int[] {
             8,
             0,
@@ -120,6 +121,7 @@ namespace BitViewer
             this.FrameSize2.Name = "FrameSize2";
             this.FrameSize2.Size = new System.Drawing.Size(90, 22);
             this.FrameSize2.TabIndex = 4;
+            this.FrameSize2.ThousandsSeparator = true;
             this.FrameSize2.Value = new decimal(new int[] {
             1,
             0,
@@ -165,6 +167,7 @@ namespace BitViewer
             this.bitSize.Name = "bitSize";
             this.bitSize.Size = new System.Drawing.Size(109, 22);
             this.bitSize.TabIndex = 6;
+            this.bitSize.ThousandsSeparator = true;
             this.bitSize.Value = new decimal(new int[] {
             4,
             0,
@@ -186,6 +189,7 @@ namespace BitViewer
             this.readFileOffset.Name = "readFileOffset";
             this.readFileOffset.Size = new System.Drawing.Size(96, 22);
             this.readFileOffset.TabIndex = 9;
+            this.readFileOffset.ThousandsSeparator = true;
             this.readFileOffset.ValueChanged += new System.EventHandler(this.ChopChanged);
             // 
             // label1
@@ -287,6 +291,7 @@ namespace BitViewer
             this.sortStart.Name = "sortStart";
             this.sortStart.Size = new System.Drawing.Size(64, 22);
             this.sortStart.TabIndex = 18;
+            this.sortStart.ThousandsSeparator = true;
             this.sortStart.ValueChanged += new System.EventHandler(this.sortStart_ValueChanged);
             // 
             // sortEnd
@@ -304,6 +309,7 @@ namespace BitViewer
             this.sortEnd.Name = "sortEnd";
             this.sortEnd.Size = new System.Drawing.Size(67, 22);
             this.sortEnd.TabIndex = 19;
+            this.sortEnd.ThousandsSeparator = true;
             this.sortEnd.ValueChanged += new System.EventHandler(this.sortEnd_ValueChanged);
             // 
             // tableLayoutPanel1
@@ -364,6 +370,7 @@ namespace BitViewer
             this.GridSpacing.Name = "GridSpacing";
             this.GridSpacing.Size = new System.Drawing.Size(67, 22);
             this.GridSpacing.TabIndex = 20;
+            this.GridSpacing.ThousandsSeparator = true;
             this.GridSpacing.Value = new decimal(new int[] {
             8,
             0,

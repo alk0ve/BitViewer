@@ -57,6 +57,7 @@
             this.numericUpDownLength.Name = "numericUpDownLength";
             this.numericUpDownLength.Size = new System.Drawing.Size(175, 32);
             this.numericUpDownLength.TabIndex = 0;
+            this.numericUpDownLength.ThousandsSeparator = true;
             this.numericUpDownLength.Value = new decimal(new int[] {
             1024,
             0,
@@ -129,6 +130,7 @@
             this.numericUpDownOffset.Name = "numericUpDownOffset";
             this.numericUpDownOffset.Size = new System.Drawing.Size(175, 32);
             this.numericUpDownOffset.TabIndex = 0;
+            this.numericUpDownOffset.ThousandsSeparator = true;
             this.numericUpDownOffset.Value = new decimal(new int[] {
             1024,
             0,
